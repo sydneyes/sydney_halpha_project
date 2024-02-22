@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+# En mega guete comment schriebe
 def alignment(raw_data):
     #Getting the centers of the sun images
     centers = []
