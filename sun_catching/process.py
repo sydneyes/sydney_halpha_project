@@ -5,11 +5,12 @@ from ctypes import *
 import cv2
 import time
 
-from test import CameraControl
+from CameraControl import CameraControl
 from alignment import alignment
 from image_processing import image_processing
-'''
-input_folder = r'/home/pi/Schreibtisch/Sun_catching/Raw_images'
+from upload_image import run_smbclient
+
+input_folder = "/home/ubuntu/docs/halpha/Sun_catching/Raw_images"
 
 raw_data = []
 image_files = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, f))]
@@ -39,12 +40,13 @@ t1 = time.time()
 images = []
 for i in range(n):
     image = cam_control.single_frame(exposure_time[i], gain, offset)
-    #print(f"Image len:{image.shape}")
+    print(f"Image len:{image.shape}")
+    print(image)
     images.append(image)
 cam_control.close()
 print(time.time()-t1)
 
-"""
+'''
 
 #Processing the images
 #First shifting the image
@@ -52,9 +54,11 @@ shifted_images = alignment(raw_data)
 
 # Secondly doing post processing and labelling the image
 text_image = image_processing(shifted_images)
-output_path = r'/home/pi/Schreibtisch/Sun_catching/Raw_images/test.tiff'
+output_path = '/home/ubuntu/docs/halpha/Sun_catching/sun.PNG'
 cv2.imwrite(output_path, text_image)
-"""
+print("Hi")
+#Loading the images to the website
+run_smbclient()
 
 
 
