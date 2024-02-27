@@ -1,0 +1,40 @@
+site_name: Halpha
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - navigation.tabs
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - How-To Guides: 
+    - how-to-guides.md
+  - Reference:
+    - Overview: reference/overview.md 
+    - julianday: reference/julianday.md
+    - brewersza: reference/brewersza.md
+    - Spectral Operations: reference/spectral_ops.md
+
+  - explanation.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
