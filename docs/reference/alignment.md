@@ -12,12 +12,18 @@ The function for the aligment is separated in 3 steps:
     circles = cv2.HoughCircles(im, cv2.HOUGH_GRADIENT, dp=1, minDist=800, param1=10, param2=30, minRadius=470, maxRadius=480)
     ```
     The Parameters have the following values:
-   - `dp=1`: Inverse ratio of the accumulator resolution to the image resolution. It defines the accumulator resolution as dp pixels in the input image.
-   - `minDist=800`: Minimum distance between the centers of the detected circles. If the distance between two circle centers is less than this value, only the stronger one is retained.
-   - `param1=10`: The higher threshold of the two passed to the Canny edge detector. It is used for edge gradient detection in the image.
-   - `param2=30`: Accumulator threshold for circle detection. It is a lower threshold for circle detection, meaning a circle needs to have at least this value in the accumulator to be considered as a candidate.
-   - `minRadius=470`: Minimum radius of the circles to be detected. This is chosen to speed up the algorithm and don't run over every circle from Radius 0.
-   - `maxRadius=480`: Maximum radius of the circles to be detected. This is chosen to speed up the algorithm and don't run over every circle from Radius 0.
+    
+    - `dp=1`: Inverse ratio of the accumulator resolution to the image resolution. It defines the accumulator resolution as dp pixels in the input image.
+
+    - `minDist=800`: Minimum distance between the centers of the detected circles. If the distance between two circle centers is less than this value, only the stronger one is retained.
+
+    - `param1=10`: The higher threshold of the two passed to the Canny edge detector. It is used for edge gradient detection in the image.
+
+    - `param2=30`: Accumulator threshold for circle detection. It is a lower threshold for circle detection, meaning a circle needs to have at least this value in the accumulator to be considered as a candidate.
+
+    - `minRadius=470`: Minimum radius of the circles to be detected. This is chosen to speed up the algorithm and don't run over every circle from Radius 0.
+
+    - `maxRadius=480`: Maximum radius of the circles to be detected. This is chosen to speed up the algorithm and don't run over every circle from Radius 0.
 
 
 
