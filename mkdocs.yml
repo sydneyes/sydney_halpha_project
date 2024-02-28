@@ -16,7 +16,7 @@ nav:
     - Livestream: how_to_guides/how-to-guide-livestream.md
     - Set_focus: how_to_guides/how-to-guide-set-focus.md
   - Reference:
-    - Camera Control: reference/cameracontrol.md
+    - "Camera Control": reference/cameracontrol.md
     - Alignment: reference/alignment.md
     - Image Processing: reference/image_processing.md
     - Server upload: reference/upload.md
