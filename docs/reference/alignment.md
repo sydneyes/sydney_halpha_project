@@ -1,5 +1,5 @@
 # Alignment
-This Script is to shift the images so that the sun in the different images is aligned. We have to do the aligment of the images to get better results in the following image processing steps. 
+This Script is to shift the images so that the sun in the different images is aligned. The aligment has to be done to get better results in the following image processing steps. 
 
 Despite the fact that the telescope is located on a tracking device there are shifts of the sun in the different images
 
@@ -43,9 +43,7 @@ The function for the aligment is separated in 3 steps:
 
 
 ### Usage 
-This function for the aligment is mainly used in a script where we take images with different exposure times and merge them later together to make a livestream. This can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/process.py).
-
-## Reference
+This function for the aligment is mainly used in a script where it takes images with different exposure times and merges them later together to make a livestream. This can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/process.py).
 
 ### Sources
 The function was build with [OpenCV](https://docs.opencv.org/4.x/index.html) and [NumPy](https://numpy.org/doc/).

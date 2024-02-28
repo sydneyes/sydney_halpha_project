@@ -1,5 +1,3 @@
-# HALPHA
-what it is
+# Solar Imaging in Halpha
 
-kdjnf,msd sdf
-dksd 
+
