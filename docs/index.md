@@ -14,10 +14,11 @@ project documentation as described by Daniele Procida
 in the [Diátaxis documentation framework](https://diataxis.fr/)
 and consists of four separate parts:
 
-1. [Tutorials](tutorials.md)
-2. [How-To Guides](how-to-guides.md)
-3. [Reference](reference/reference.md)
-4. [Explanation](explanation.md)
+1. [Overview](overview.md)
+2. [Installation Guide](installation.md)
+3. [How-To Guides](how-to-guides/how-to-guide-livestream.md)
+4. [Reference](reference/cameracontrol.md)
+5. [Hardware](hardware.md)
 
 Quickly find what you're looking for depending on
 your use case by looking at the different pages.
