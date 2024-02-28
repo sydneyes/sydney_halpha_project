@@ -11,7 +11,7 @@ plugins:
 nav:
   - Home: index.md
   - Overview: index.md
-  -Installation Guide: installation.md
+  - Installation Guide: installation.md
   - How-To Guides: 
     - Livestream: how_to_guides/how-to-guide-livestream.md
     - Set_focus: how_to_guides/how-to-guide-set-focus.md
