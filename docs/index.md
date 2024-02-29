@@ -1,5 +1,5 @@
 This site contains the project documentation for the
-`Solar Imaging in Halpha` project that is a project realised from civil service employees at the PMOD/WRC in Davos, Switzerland.
+**Solar Imaging in Halpha** project that is a project realised from civil service employees at the PMOD/WRC in Davos, Switzerland.
 
 ## Table Of Contents
 

@@ -43,7 +43,7 @@ The function for the aligment is separated in 3 steps:
 
 
 ### Usage 
-This function for the aligment is mainly used in a script where it takes images with different exposure times and merges them later together to make a livestream. This can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/process.py).
+This function for the aligment is mainly used in a script where it takes images with different exposure times and merges them later together to make a livestream. This can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/livestream.py).
 
 ### Sources
 The function was build with [OpenCV](https://docs.opencv.org/4.x/index.html) and [NumPy](https://numpy.org/doc/).

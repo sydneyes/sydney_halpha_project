@@ -63,7 +63,7 @@ Image to visualise the effect of taking the mean
 
 #### Cutting out the sun
 
-To make sure that everything outside the sun is set to 0 the center is calculated with the `HoughCircles` function like done in the [Alignment](https://github.com/pmodwrc/halpha/blob/main/docs/reference/alignment.md).
+To make sure that everything outside the sun is set to 0 the center is calculated with the `HoughCircles` function like done in the [alignment](https://pmodwrc.github.io/halpha/reference/alignment/).
 
 Afterwards you determine the radius where the sun ends with the function plot_values_for_radii. This is then used to set every value outside the sun to 0.
 
@@ -85,9 +85,7 @@ To give the images a more scientific look they get labeled  with the positions o
 
 ### Usage 
 
-This image processing script is mainly used in our application for the livestream. It follows the alignment of the raw images. The whole script for the livetstream can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/image_processing.py)
-
-
+This image processing script is mainly used in our application for the livestream. It follows the alignment of the raw images. The whole script for the livetstream can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/livestream.py).
 
 ### Sources
 The idea of the shadow correction with a Gaussian Kernel and the following Division is taken from pages 173 and 174 of:
@@ -96,7 +94,7 @@ The idea of the shadow correction with a Gaussian Kernel and the following Divis
 The functions where mainly build with [OpenCV](https://docs.opencv.org/4.x/index.html), [NumPy](https://numpy.org/doc/), [Matplotlib](https://matplotlib.org/stable/index.html).
 
 ### Python Script
-The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/image_processing.py)
+The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/image_processing.py).
 
 
 

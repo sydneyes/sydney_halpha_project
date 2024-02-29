@@ -35,6 +35,5 @@ shifted_images = alignment(images)
 text_image = image_processing(shifted_images)
 output_path = '/home/ubuntu/docs/halpha/Sun_catching/sun.PNG'
 cv2.imwrite(output_path, text_image)
-print("Hi")
 #Loading the images to the website
 run_smbclient()
