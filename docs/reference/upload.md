@@ -12,4 +12,4 @@ This command uploads the image which is saved as `sun.PNG` to the [website](http
     It is important to locate the file which you want to upload in the same folder as your Python Script that uses this function.
 
 #### Python Script
-The Python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/upload_image.py).
+The Python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/upload_image.py). Hi
