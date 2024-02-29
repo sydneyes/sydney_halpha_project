@@ -11,9 +11,7 @@ plugins:
   - mkdocstrings
   - git-revision-date-localized:
       type: date
-  - git-committers:
-      respository: HAlpha
-      branch: main
+  - git-authors
 
 nav:
   - Home: index.md
