@@ -6,7 +6,7 @@ This site contains the project documentation for the
 The documentation is split up in 5 different parts. Use this to locate your deswired part of the project and start looking at the different pages.
 
 1. [Overview](overview.md)
-2. [Installation Guide](installation.md)
+2. [Installation Guide](installation-guide/overview.md)
 3. [How-To Guides](how-to-guides/how-to-guide-livestream.md)
 4. [Reference](reference/cameracontrol.md)
 5. [Hardware](hardware.md)

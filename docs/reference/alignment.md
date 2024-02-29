@@ -49,7 +49,7 @@ This function for the aligment is mainly used in a script where it takes images 
 The function was build with [OpenCV](https://docs.opencv.org/4.x/index.html) and [NumPy](https://numpy.org/doc/).
 
 ### Python Script
-The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/alignment.py).jsddscks
+The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/alignment.py).
 
 
 
