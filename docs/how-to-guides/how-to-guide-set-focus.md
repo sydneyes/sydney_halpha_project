@@ -43,10 +43,9 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 - **Step 6:** There are a few things that are important to properly adjust the focus on the telescope:
 
     - Try to get the sun in the center of the telescope before you start to adjust on the different wheels. You can change the camera with an eyepiece to look that the sun is perfectly in the middle.
-    - Then adjust firstly the Tmax tilt wheel and afterwards the RichView tuning ring while looking through the eyepiece. (image PST manual)
+    - Then adjust firstly the Tmax tilt wheel and afterwards the RichView tuning ring while looking through the eyepiece. 
 
-
-
+    ![PST](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/solar_tele.PNG)
 
     - Then connect the QHYCCD camera to the telescope and try to get the focus with adjusting the focus knob and the distance of the camera to the telescope.
 
