@@ -9,9 +9,11 @@ theme:
 
 plugins:
   - mkdocstrings
+  - tags
   - git-revision-date-localized:
       type: date
   - git-authors
+
 
 nav:
   - Home: index.md
@@ -32,7 +34,7 @@ nav:
   - Hardware: hardware.md
   
 repo_url: https://github.com/pmodwrc/halpha 
-repo_name: HAlpha
+repo_name: pmodwrc/HAlpha
 
 
 
