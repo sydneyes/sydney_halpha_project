@@ -56,7 +56,7 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 
 
 ### Python script
-The script for setting the focus can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/set_focus.py). For further explanations of the script go to the how to guide of the [livestream](https://github.com/pmodwrc/halpha/blob/main/docs/how-to-guides/how-to-guide-livestream.md). The script for the livestream is build similarly to this one.
+The script for setting the focus can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/set_focus.py). For further explanations of the script go to the how to guide of the [livestream](https://pmodwrc.github.io/halpha/how-to-guides/how-to-guide-livestream/). The script for the livestream is build similarly to this one.
 
 
 
