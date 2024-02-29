@@ -11,7 +11,11 @@ plugins:
 nav:
   - Home: index.md
   - Overview: overview.md
-  - Installation Guide: installation.md
+  - Installation Guide: 
+    - Overview of the Project: installation-guide/overview.md
+    - System Requirements: installation-guide/system-requirements.md
+    - Installation Steps: installation-guide/installation.md
+    - Troubleshooting: installation-guide/trouble.md
   - How-To Guides: 
     - Livestream: how-to-guides/how-to-guide-livestream.md
     - Seting focus: how-to-guides/how-to-guide-set-focus.md
