@@ -12,6 +12,7 @@ plugins:
   - git-revision-date-localized:
       type: date
   - git-authors
+  - tags
 
 nav:
   - Home: index.md
