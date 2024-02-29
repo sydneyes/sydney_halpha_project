@@ -99,7 +99,7 @@ The idea of the shadow correction with a Gaussian Kernel and the following Divis
 The functions where mainly build with [OpenCV](https://docs.opencv.org/4.x/index.html), [NumPy](https://numpy.org/doc/), [Matplotlib](https://matplotlib.org/stable/index.html).
 
 ### Python Script
-The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/image_processing.py).
+The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/image_processing.py). 
 
 
 
