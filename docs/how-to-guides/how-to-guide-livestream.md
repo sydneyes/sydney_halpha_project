@@ -5,7 +5,7 @@ This is a step-by-step guide for setting up a livestream of the images from the 
 It is called a livestream but in reality it shoots and reloads the image approximatly every 10 seconds. This is due to the limited computing capacity of the raspberrypi and the very computationally intensive image processing. 
 
 ### Step by step guide
-- **Step 1:** First off all you nedd to make sure that the focus of the camera is set properly and you tested it with different exposure times. To set up the focus you can follow this [How-to-guide](https://pmodwrc.github.io/halpha/how-to-guides/how-to-guide-set-focus/). 
+- **Step 1:** First off all you need to make sure that the focus of the camera is set properly and you tested it with different exposure times. To set up the focus you can follow this [How-to-guide](https://pmodwrc.github.io/halpha/how-to-guides/how-to-guide-set-focus/). 
 
 - **Step 2:** After that you can start the `livestream.py` script with the following command:
     ```
