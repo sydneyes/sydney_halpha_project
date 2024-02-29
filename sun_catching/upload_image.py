@@ -2,8 +2,8 @@ import subprocess
 import os
 
 
-user = os.getenv("SAMBA_USER", "web.service@ad.pmodwrc.ch")
-password = os.getenv("SAMBA_PASSWORD", "SCRLvugFhi0dKu7K5XnF")
+user = os.getenv("SAMBA_USER", "<your_user>")
+password = os.getenv("SAMBA_PASSWORD", "<your_password>")
 path_to_client = "/usr/bin/smbclient"
 path_to_target = "//ad.pmodwrc.ch/Institute"
 workgroup = "AD.pmodwrc.ch"
