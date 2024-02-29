@@ -1,1 +1,2 @@
-url to docs: https://pmodwrc.github.io/halpha/
+# HALPHA project
+url to [docs](https://pmodwrc.github.io/halpha/)
