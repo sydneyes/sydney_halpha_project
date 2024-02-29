@@ -10,7 +10,7 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 - Access to the telescope(in our case it is located on the WSG)
 - patience
 
-### Steps
+### Step by step guide
 - **Step 1:** Set up your laptop with connection to the network and open up the telescope.
 - **Step 2:** To connect to the RaspberryPi open your command prompt and use the following command to get a connection via ssh with the RaspberryPi.
 
@@ -55,6 +55,8 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 - **Step 7**: To abort the program and to run it with another exposure time just press `Crtl + C`
 
 
+### Python script
+The script for setting the focus can be found [here](https://github.com/pmodwrc/halpha/blob/main/sun_catching/set_focus.py). For further explanations of the script go to the how to guide of the [livestream](https://github.com/pmodwrc/halpha/blob/main/docs/how-to-guides/how-to-guide-livestream.md). The script for the livestream is build similarly to this one.
 
 
 
