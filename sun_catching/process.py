@@ -10,7 +10,7 @@ from alignment import alignment
 from image_processing import image_processing
 from upload_image import run_smbclient
 
-input_folder = "/Raw_images"
+input_folder = "Raw_images"
 
 raw_data = []
 image_files = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, f))]
