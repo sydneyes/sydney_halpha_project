@@ -6,7 +6,10 @@ In this part of the documentation the code is split up in different sections of 
 
 #### Shading Correction
 
-The shading correction is needed because the telescope produces a shading on the images that are made with a CMOS camera. Like you can see ![Image with shadows](https://github.com/pmodwrc/halpha/blob/main/sun_catching/Raw_images/sun_halpha_0.tiff)
+The shading correction is needed because the telescope produces a shading on the images that are made with a CMOS camera. Like you can see here:
+
+![Image with shadows](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/sun_with_shadow.png)
+
 
 The Gaussian Kernel is set to a big size and a high sigma. It is applied in the spatial domain. With this Kernel the image gets blurred  so far that we only the shadows produced by the telescope remain. In astronomy this is often reffered to as flat field correction. The Kernel is applied with the `filter2d` function from `cv2`.
 
@@ -46,7 +49,11 @@ This function is used several times to not loose any structure while processing 
 
 To get the sections with important structures you try to extract the parts of the histogram where it has a peak. This is done with analysing the CDF function of the histogram. The parts where the CDF function doesn't change more than a certain value are extracted and used to determine `min_value`and `max_value` for the histogram stretching.
 
-Image with histogram and cdf function
+![Histogram](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/histogram.png)
+
+The peak on the left marks the structure on the border and the peak on the right the structure on the inside. To extract the `min_value` and `max_value` for later stretching the cdf function is used:
+
+![CDF Function](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/cdf_function.png)
 
 
 #### Merging the images
@@ -59,11 +66,9 @@ data_image = compensator.process(gaus_images)
 ```
 Firstly the raw images gets stacked and secondly the images with the shadow correction are stacked. Afterwards the mean of this two images is taken to ensure that the values of the image are not to high nor to low.
 
-Image to visualise the effect of taking the mean
-
 #### Cutting out the sun
 
-To make sure that everything outside the sun is set to 0 the center is calculated with the `HoughCircles` function like done in the [alignment](https://pmodwrc.github.io/halpha/reference/alignment/).
+To make sure that everything outside the sun is set to 0 the center is calculated with the `HoughCircles` function from `cv2`.
 
 Afterwards you determine the radius where the sun ends with the function plot_values_for_radii. This is then used to set every value outside the sun to 0.
 

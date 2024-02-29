@@ -1,12 +1,9 @@
 This site contains the project documentation for the
-**Solar Imaging in Halpha** project that is a project realised from civil service employees at the PMOD/WRC in Davos, Switzerland.
+**HAlpha** project that is a project realised from civil service employees at the PMOD/WRC in Davos, Switzerland.
 
 ## Table Of Contents
 
-The documentation follows the best practice for
-project documentation as described by Daniele Procida
-in the [Diátaxis documentation framework](https://diataxis.fr/)
-and consists of five separate parts:
+The documentation is split up in 5 different parts. Use this to locate your deswired part of the project and start looking at the different pages.
 
 1. [Overview](overview.md)
 2. [Installation Guide](installation.md)
@@ -14,8 +11,6 @@ and consists of five separate parts:
 4. [Reference](reference/cameracontrol.md)
 5. [Hardware](hardware.md)
 
-Quickly find what you're looking for depending on
-your use case by looking at the different pages.
 
 ## Acknowledgements
 
