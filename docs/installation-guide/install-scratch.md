@@ -73,3 +73,64 @@ pi@raspberrypi:~ $ git clone https://github.com/pmodwrc/halpha.git
 pi@raspberrypi:~ $ cd halpha
 ```
 Now we sucessfully cloned the source repo! :fire:
+
+#### Install other dependencies
+To properly use python we need a virtual environment. For this we uses `venv` but you could also use `conda`.
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ sudo apt-get install python3-venv
+```
+Since we use `opencv` we need to have libg installed. To do this we install 
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ sudo apt-get install libgl1-mesa-glx
+```
+####Installing `Samba`
+To later share our png files on a external drive we install `Samba` and the client `smbclient`. 
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ sudo apt-get install samba smbclient
+```
+#### Setting up the virtual environment
+To create an environment we go to our halpha directory and we run the venv command inside of python
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ python -m venv <Path_to_your_venv>
+```
+in our case we just keep it close inside the our halpha directory thus the command is 
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ python -m venv venv
+```
+If you type now `ls` you should see the `venv` directory :fire:. Once created we can activate it with following command. 
+```bash title="ssh terminal"
+pi@raspberrypi:~/docs/halpha $ source venv/bin/activate
+```
+!!!tip 
+    Note that if you're in a different directory you need to specify the correct path to the venv directory. Once the venv is activated you should see the current activated environment in the first part of your terminal.
+
+Now we install all the needed python packages we have in our code.
+```bash title="ssh terminal"
+(venv) pi@raspberrypi:~/docs/halpha $ pip install -r requirements.txt
+```
+
+#### Setup the Samba client
+To do this you just need to configure to environment variables. Ask your sysadmin what is the username and password for your saba client and run in the terminal:
+```bash title="ssh terminal"
+pi@raspberrypi:~$ export SAMBA_USER=<your_user>
+pi@raspberrypi:~$ export SAMBA_PASSWORD=<your_password>
+```
+
+#### Installing the camera driver
+
+For this step we change the directory to `/camera_driver/raspberrypi_5`. Here we unpack the compressed driver file:
+```bash title="ssh terminal"
+(venv) pi@raspberrypi:~/docs/halpha/camera_driver/raspberrypi_5 $  tar -xvf sdk_libqhyccd_20240118.tar
+```
+this should create a `sdk_Arm64_24.01.09` directory. We inter this directory and run the installation script:
+```bash title="ssh terminal"
+(venv) pi@raspberrypi:~/docs/halpha/camera_driver/raspberrypi_5/sdk_Arm64_24.01.09 $ sudo ./install.sh
+```
+you can now test out if the driver got installed. There are test programms under `usr/local/testapp/` or you can run our python script to test out if the installation worked. 
+
+For the second one go back to the root of halpha and go into the sun_catching directory. 
+Try it out! Hook-up the camera and run the pythonscript! For this you run `python process.py`.
+
+If everything went well you should be now setup and ready! :fire:
+
+**Happy coding :sparkles:**
