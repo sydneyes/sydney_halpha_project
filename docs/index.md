@@ -1,27 +1,16 @@
 This site contains the project documentation for the
-`calculator` project that is a toy module used in the
-Real Python tutorial
-[Build Your Python Project Documentation With MkDocs](
-    https://realpython.com/python-project-documentation-with-mkdocs/).
-Its aim is to give you a framework to build your
-project documentation using Python, MkDocs,
-mkdocstrings, and the Material for MkDocs theme.
+**HAlpha** project that is a project realised from civil service employees at the PMOD/WRC in Davos, Switzerland.
 
 ## Table Of Contents
 
-The documentation follows the best practice for
-project documentation as described by Daniele Procida
-in the [Diátaxis documentation framework](https://diataxis.fr/)
-and consists of four separate parts:
+The documentation is split up in 5 different parts. Use this to locate your deswired part of the project and start looking at the different pages.
 
 1. [Overview](overview.md)
-2. [Installation Guide](installation.md)
+2. [Installation Guide](installation-guide/overview.md)
 3. [How-To Guides](how-to-guides/how-to-guide-livestream.md)
 4. [Reference](reference/cameracontrol.md)
 5. [Hardware](hardware.md)
 
-Quickly find what you're looking for depending on
-your use case by looking at the different pages.
 
 ## Acknowledgements
 

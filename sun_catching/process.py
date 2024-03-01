@@ -10,7 +10,7 @@ from alignment import alignment
 from image_processing import image_processing
 from upload_image import run_smbclient
 
-input_folder = "/home/ubuntu/docs/halpha/Sun_catching/Raw_images"
+input_folder = "Raw_images"
 
 raw_data = []
 image_files = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, f))]
@@ -20,7 +20,7 @@ for filename in image_files:
         input_image_path = os.path.join(input_folder, filename)
         image = cv2.imread(input_image_path, cv2.IMREAD_GRAYSCALE)
         raw_data.append(image)
-'''
+
 
 
 
@@ -46,7 +46,7 @@ for i in range(n):
 cam_control.close()
 print(time.time()-t1)
 
-'''
+
 
 #Processing the images
 #First shifting the image
@@ -54,7 +54,7 @@ shifted_images = alignment(raw_data)
 
 # Secondly doing post processing and labelling the image
 text_image = image_processing(shifted_images)
-output_path = '/home/ubuntu/docs/halpha/Sun_catching/sun.PNG'
+output_path = 'sun.PNG'
 cv2.imwrite(output_path, text_image)
 print("Hi")
 #Loading the images to the website
