@@ -6,7 +6,7 @@ Welcome to the HAlpha project, a small project designed to capture and enhance i
 ## What is HAlpha?
 HAlpha is a system that leverages the PMOD-WRC platform, located in Davos. PMOD-WRC platform is an automated solar tracking and measurement plattform. HAlpha is mounted on the WSG plattform thus every  time measurements are done with the plattform HAlpha can take fotos of the sun and stream them onto our webpage. These photos are then processed through some image processing algorythms to improve image quality.
 
-![Flowchart main process](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/solar_imaging.png)
+![Flowchart main process](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/solar_imaging.png) 
 
 The project utilizes a Raspberry Pi 5 as the central computing unit, connecting to a QHYCCD camera via USB. 
 
