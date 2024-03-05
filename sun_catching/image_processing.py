@@ -181,36 +181,34 @@ def image_processing(images):
         start, end = interval
         if end - start > 5:
             intervals.append(interval)
-    
-    
-    #Stretching the peaks 
-    # Set the range you want to stretch
-    min_intensity_low = intervals[0][1]
-    max_intensity_high = intervals[1][0]
-    
-    # Define the new min and max values for stretching
-    new_min = 0
-    new_max = 255/2
-    
-    # Stretch the specified range in the image
-    stretched_image = stretch_intensity(image, min_intensity_low, max_intensity_high, new_min, new_max)
-    
-    # Set the range you want to stretch
-    min_intensity = intervals[1][1]
-    max_intensity = intervals[2][0]
-    
-    # Define the new min and max values for stretching
-    new_min = 100
-    new_max = 255
-    
-    # Stretch the specified range in the image
-    stretched_image = stretch_intensity(stretched_image, min_intensity, max_intensity, new_min, new_max)
-    normalized_data = cv2.normalize(stretched_image, None, 0, 255, cv2.NORM_MINMAX)
-    stretched_image = np.uint8(normalized_data)
-    
+    if len(intervals) == 3:
+        #Stretching the peaks 
+        # Set the range you want to stretch
+        min_intensity_low = intervals[0][1]
+        max_intensity_high = intervals[1][0]
+        
+        # Define the new min and max values for stretching
+        new_min = 0
+        new_max = 255/2
+        
+        # Stretch the specified range in the image
+        stretched_image = stretch_intensity(image, min_intensity_low, max_intensity_high, new_min, new_max)
+        
+        # Set the range you want to stretch
+        min_intensity = intervals[1][1]
+        max_intensity = intervals[2][0]
+        
+        # Define the new min and max values for stretching
+        new_min = 100
+        new_max = 255
+        
+        # Stretch the specified range in the image
+        stretched_image = stretch_intensity(stretched_image, min_intensity, max_intensity, new_min, new_max)
+        normalized_data = cv2.normalize(stretched_image, None, 0, 255, cv2.NORM_MINMAX)
+        stretched_image = np.uint8(normalized_data)
+        image = stretched_image
+        
     # Shifting the sun to the center of the image
-    image = stretched_image
-
     image_height, image_width = image.shape[:2]
 
     shift_x = image_width // 2 - middle[0]

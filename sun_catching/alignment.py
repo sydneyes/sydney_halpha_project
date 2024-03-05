@@ -5,11 +5,15 @@ def alignment(raw_data):
     #Getting the centers of the sun images
     centers = []
     for im in raw_data:
-        circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=470,maxRadius=480)
-        circles = np.uint16(np.around(circles))
-        middle = np.array([circles[0,0,0],circles[0,0,1]])
-        centers.append(middle)
-
+        try:
+            circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=470,maxRadius=480)
+            circles = np.uint16(np.around(circles))
+            middle = np.array([circles[0,0,0],circles[0,0,1]])
+            centers.append(middle)
+        except cv2.error:
+            print("No circles detected")
+            print("Make sure the telescope is properly focused on the sun")
+            return 
     #Calculating the values for the shift
     coordinates = np.empty((0,2))
     coordinates = np.vstack((coordinates, centers))

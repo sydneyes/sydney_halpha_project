@@ -2,8 +2,8 @@ import subprocess
 import os
 
 
-user = os.getenv("SAMBA_USER", "<your_user>")
-password = os.getenv("SAMBA_PASSWORD", "<your_password>")
+user = os.getenv("SAMBA_USER", "web.service")
+password = os.getenv("SAMBA_PASSWORD", "PEnn2moSPvMLboU5HCPe")
 path_to_client = "/usr/bin/smbclient"
 path_to_target = "//ad.pmodwrc.ch/Institute"
 workgroup = "AD.pmodwrc.ch"
@@ -21,8 +21,11 @@ def run_smbclient():
 
     try:
         subprocess.run(command, check=True)
-        print("Command executed successfully.")
+        print("Image uploaded successfully")
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
+        print("Image couldn't be uploaded")
+        print("check the following script to repair the errror")
+        print("/home/pi/dos/halpha/sun_catching/upload_image.py")
+        return
         
-run_smbclient()
