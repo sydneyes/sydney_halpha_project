@@ -15,7 +15,7 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 - **Step 2:** To connect to the RaspberryPi open your command prompt and use the following command to get a connection via ssh with the RaspberryPi.
 
     ```
-    ssh ubuntu@172.16.10.192
+    ssh ubuntu@172.16.8.52
     ```
 
     The password is 
@@ -24,9 +24,9 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
     .....
     ```
 
-    If it not possible to connect check wheter the RaspberryPi is connected with the network
+    If it not possible to connect check wheter the RaspberryPi is connected with the network.
 
-- **Step 3:** Now activate the virtual environement with the following command:
+- **Step 3:** Now change you directory and to '/docs/halpha/' activate the virtual environement with the following command:
     ```
     source venv/bin/activate
     ``` 
@@ -34,7 +34,7 @@ There are 7 steps to follow to do it properly. First of all you need a few thing
 - **Step 4:** Now change your directory to the following directory and run the Python Script `set_focus.py`:
 
     ```
-    cd docs/halpha/Sun_catching
+    cd sun_catching
     ```
     Now it should reload the `test_focus.PNG` every few seconds.
 

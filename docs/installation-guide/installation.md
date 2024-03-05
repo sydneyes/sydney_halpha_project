@@ -24,3 +24,13 @@ Requirements:
 4. Insert the microSD Card into Your Raspberry Pi 5: Place the microSD card into the Raspberry Pi's card slot.
 
 5. Power Up: Connect the Raspberry Pi to power. The system should boot up from the pre-configured image, and you'll be ready to proceed with the HAlpha setup.
+!!! tip
+    We used the default username and password you can change once connected!
+
+
+    | Role  | Username | Password  |
+    | ----- | -------- | --------- |
+    | Admin | pi       | raspberry |
+
+    to change just use the `passwd` comand
+

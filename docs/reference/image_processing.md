@@ -1,6 +1,8 @@
 # Image Processing
 This script is for image processing. It takes pictures of the sun with different exposure times edits them and merges them together afterwards. In the end it colors the final image and labels it with time and location of the image taken.
 
+![Flowchart image processing](https://raw.githubusercontent.com/pmodwrc/halpha/main/docs/images/image_processing_flow.png)
+
 ### Code Description
 In this part of the documentation the code is split up in different sections of the image processing. 
 
