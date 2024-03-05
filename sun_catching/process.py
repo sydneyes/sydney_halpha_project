@@ -56,7 +56,6 @@ shifted_images = alignment(raw_data)
 text_image = image_processing(shifted_images)
 output_path = 'sun.PNG'
 cv2.imwrite(output_path, text_image)
-print("Hi")
 #Loading the images to the website
 run_smbclient()
 
