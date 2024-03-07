@@ -18,6 +18,7 @@ def run_smbclient():
         "--command",
         cmd  
     ]
+    print(command)
 
     try:
         subprocess.run(command, check=True)
@@ -28,4 +29,3 @@ def run_smbclient():
         print("check the following script to repair the errror")
         print("/home/pi/dos/halpha/sun_catching/upload_image.py")
         return
-        

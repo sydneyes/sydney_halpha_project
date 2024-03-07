@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-# min tolle comment
+import sys
+
 def alignment(raw_data):
     #Getting the centers of the sun images
     centers = []
@@ -13,7 +14,9 @@ def alignment(raw_data):
         except cv2.error:
             print("No circles detected")
             print("Make sure the telescope is properly focused on the sun")
-            return 
+            with open("error.txt", "a") as file:
+                file.write("alignment_error")
+            sys.exit("Telescope not focused properly") 
     #Calculating the values for the shift
     coordinates = np.empty((0,2))
     coordinates = np.vstack((coordinates, centers))
