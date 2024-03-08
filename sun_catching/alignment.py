@@ -1,22 +1,26 @@
 import cv2
 import numpy as np
 import sys
+import logging
 
-def alignment(raw_data):
+def alignment(raw_data, log_file_path):
     #Getting the centers of the sun images
     centers = []
     for im in raw_data:
-        try:
-            circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=470,maxRadius=480)
-            circles = np.uint16(np.around(circles))
-            middle = np.array([circles[0,0,0],circles[0,0,1]])
-            centers.append(middle)
-        except cv2.error:
-            print("No circles detected")
-            print("Make sure the telescope is properly focused on the sun")
-            with open("error.txt", "a") as file:
-                file.write("alignment_error")
-            sys.exit("Telescope not focused properly") 
+        #try:
+        circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=470,maxRadius=480)
+        print(circles)
+        circles = np.uint16(np.around(circles))
+        middle = np.array([circles[0,0,0],circles[0,0,1]])
+        centers.append(middle)
+        '''
+        except Exception as e:
+            with open(log_file_path, 'w'):
+                pass
+            logging.error(f"An error occurred: {str(e)}", exc_info=True)
+            return
+            #sys.exit("Telescope not focused properly")
+        '''
     #Calculating the values for the shift
     coordinates = np.empty((0,2))
     coordinates = np.vstack((coordinates, centers))
