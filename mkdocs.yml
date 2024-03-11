@@ -32,6 +32,7 @@ nav:
     - Alignment: reference/alignment.md
     - Image Processing: reference/image_processing.md
     - Server upload: reference/upload.md
+    - Remote Access: reference/gui.md
   - Hardware: hardware.md
   
 repo_url: https://github.com/pmodwrc/halpha 

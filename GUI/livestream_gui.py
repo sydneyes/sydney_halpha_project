@@ -15,7 +15,6 @@ if os.path.isfile(lock_file_path):
 with open(lock_file_path, 'w') as lock_file:
     lock_file.write("")
 
-# Your existing code...
 
 def on_window_close():
     # Remove the lock file when the GUI is closed
