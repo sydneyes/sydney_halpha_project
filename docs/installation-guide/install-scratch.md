@@ -6,8 +6,9 @@ Requirements:
 - A Raspberry Pi 5 (R-Pi)
 - A microSD card (16GB or larger recommended)
 - A microSD card reader
-- The pre-configured HAlpha image file. You will find the latest release in the source repo.
+- The pre-configured HAlpha image file. You will find the [latest release](https://github.com/pmodwrc/halpha/releases) in the source repo.
 - Imaging software [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
+- Power source 5V@5A 
 
 ### Write image Steps
 1. Open Raspberry Pi Imager.

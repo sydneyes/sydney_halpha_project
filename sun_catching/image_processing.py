@@ -1,8 +1,5 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-import os
-import time
 import math
 from matplotlib.colors import LinearSegmentedColormap
 from datetime import datetime
@@ -19,7 +16,7 @@ def points_on_circle(center_x, center_y, radius, num_points):
         y = int(center_y + radius * math.sin(angle))
         points.append((x, y))
 
-    return points
+    return points 
 
 def sum_values_on_circle(image, center_x, center_y, radius, num_points):
     points = points_on_circle(center_x, center_y, radius, num_points)

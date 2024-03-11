@@ -10,7 +10,7 @@ from alignment import alignment
 from image_processing import image_processing
 from upload_image import run_smbclient
 
-input_folder = "Raw_images"
+input_folder = "test_files"
 
 raw_data = []
 image_files = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, f))]
@@ -56,7 +56,6 @@ shifted_images = alignment(raw_data)
 text_image = image_processing(shifted_images)
 output_path = 'sun.PNG'
 cv2.imwrite(output_path, text_image)
-print("Hi")
 #Loading the images to the website
 run_smbclient()
 
