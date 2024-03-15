@@ -10,7 +10,7 @@ Afterwards a window with an interface is created with the [Tkinter library](http
 To get the status of the livetsream the following comamnd is executed in the terminal of the RaspberryPi over SSH.
 
 ```
-command = f"ps aux | grep {script_name}"
+command = f"ps aux | grep {script_name}"   
 
 ```
 
