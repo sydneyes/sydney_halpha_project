@@ -4,11 +4,13 @@ import sys
 import logging
 
 def alignment(raw_data, log_file_path):
+    
     #Getting the centers of the sun images
+
     centers = []
     for im in raw_data:
         #try:
-        circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=470,maxRadius=480)
+        circles = cv2.HoughCircles(im,cv2.HOUGH_GRADIENT,dp=1,minDist=800,param1 = 10,param2=30,minRadius=460,maxRadius=480)
         print(circles)
         circles = np.uint16(np.around(circles))
         middle = np.array([circles[0,0,0],circles[0,0,1]])

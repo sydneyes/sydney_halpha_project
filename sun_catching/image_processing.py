@@ -151,7 +151,7 @@ def image_processing(images):
     image = set_values_outside_radius_to_zero(mean,middle[0],middle[1], min_radius) 
     normalized_data = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
     image = np.uint8(normalized_data)
-    
+    '''
     # Stretching the image so the edge of the sun and the structure is better visible
     
     # Calculating the start and end of the peaks
@@ -204,7 +204,7 @@ def image_processing(images):
         normalized_data = cv2.normalize(stretched_image, None, 0, 255, cv2.NORM_MINMAX)
         stretched_image = np.uint8(normalized_data)
         image = stretched_image
-        
+    '''    
     # Shifting the sun to the center of the image
     image_height, image_width = image.shape[:2]
 
