@@ -8,7 +8,7 @@ password = os.getenv("SAMBA_PASSWORD", "PEnn2moSPvMLboU5HCPe")
 path_to_client = "/usr/bin/smbclient"
 path_to_target = "//ad.pmodwrc.ch/Institute"
 workgroup = "AD.pmodwrc.ch"
-cmd = "cd Infrastructure/WWW/www.pmodwrc.ch/htdocs/images/halpha; put sun.PNG"
+cmd = "cd Infrastructure/WWW/www.pmodwrc.ch/htdocs/images/halpha; put sun3.PNG"
 
 def run_smbclient():
     command = [

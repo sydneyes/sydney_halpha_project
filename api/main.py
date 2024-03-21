@@ -1,13 +1,15 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.staticfiles import StaticFiles
 import subprocess
 import uvicorn
 import logging
+import secrets
 
-from fastapi.staticfiles import StaticFiles
-from datetime import datetime
+
+
 
 
 app = FastAPI()
@@ -19,7 +21,7 @@ security = HTTPBasic()
 
 # Replace 'your_username' and 'your_password' with the desired credentials
 USERNAME = "pi"
-PASSWORD = "raspberry"
+PASSWORD = "halpha"
 
 target_script = 'livestream.py'
 target_script_path = "/home/pi/docs/halpha/sun_catching/livestream.py"
@@ -50,21 +52,23 @@ def stop_script():
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
 
-def authenticate_user(credentials: HTTPBasicCredentials = Depends(security)):
+def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), request: Request = None):
     if credentials.username != USERNAME or credentials.password != PASSWORD:
-        raise HTTPException(
-            status_code=401,
-            detail="Unauthorized",
-            headers={"WWW-Authenticate": "Basic realm='Restricted area'"},
-        )
+        print("help")
+        return False
     return True
 
 
 
-@app.get("/execute_script", response_class=HTMLResponse, dependencies=[Depends(authenticate_user)])
-def trigger_script_execution(request: Request):
-    execute_script()
-    return RedirectResponse(url="/")
+@app.get("/execute_script", response_class=HTMLResponse)
+def trigger_script_execution(request: Request, authorized: bool = Depends(authenticate_user)):
+    if authorized == True:
+        execute_script()
+        #return RedirectResponse(url="/")
+    else:
+        print("not authorized")
+        return RedirectResponse(url="/")
+    
 @app.get("/stop_script", response_class=HTMLResponse, dependencies=[Depends(authenticate_user)])
 def trigger_script_stop(request: Request):
     stop_script()
