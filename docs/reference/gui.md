@@ -1,4 +1,4 @@
-# Remote access
+# Remote access - GUI
 The script [livestream_gui.py](https://github.com/pmodwrc/halpha/blob/main/GUI/livestream_gui.py) is meant to build an easy controllable interface to start and stop the livestream. Furthermore it also displays the most common errors that occur on the [livestream.py](https://github.com/pmodwrc/halpha/blob/main/sun_catching/livestream.py) script is running. 
 
 ## Code Description
@@ -29,7 +29,7 @@ ssh.exec_command(f"pkill -f 'python /home/pi/docs/halpha/sun_catching/livestream
 This simply kills all processes assigned to the livestream.py script.
 
 ### Error handling
-To handle the errors that occur in the livetsream.py script they are written into a logfile on the RaspberryPi. This file can then be read over an sftp connection with the RaspberryPi with the following structure.
+To handle the errors that occur in the livetsream.py script they are written into a logfile on the RaspberryPi. This file can then be read over an SFTP connection with the RaspberryPi with the following structure.
 ```python
     with sftp.file("/home/pi/docs/halpha/sun_catching/error_log.txt", 'r') as file:
         file_contents = file.read()
