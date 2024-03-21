@@ -1,4 +1,4 @@
-# Remote access
+# Remote access - GUI
 The script [livestream_gui.py](https://github.com/pmodwrc/halpha/blob/main/GUI/livestream_gui.py) is meant to build an easy controllable interface to start and stop the livestream. Furthermore it also displays the most common errors that occur on the [livestream.py](https://github.com/pmodwrc/halpha/blob/main/sun_catching/livestream.py) script is running. 
 
 ## Code Description
@@ -43,5 +43,5 @@ To use this interface on a remote machine Python should be installed on the remo
 - Tkinter
 
 ## Python script
-The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/GUI/livestream_gui.py).
+The python script can be found [here]().
 
