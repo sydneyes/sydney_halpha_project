@@ -130,6 +130,10 @@ venv.bak/
 
 *.ipynb
 
+fastapi/
+sun_catching/Raw_images
+sun_catching/test_files
+
 # Spyder project settings
 .spyderproject
 .spyproject
