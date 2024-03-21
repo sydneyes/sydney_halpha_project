@@ -10,7 +10,7 @@ cam_control = CameraControl(cam_id=cam_id, dll_path=path)
 
 #success = cam_control.cam.so.InitQHYCCDResource()
 
-exposure_time = 2000
+exposure_time = 600
 gain = 20
 offset = 6
 
