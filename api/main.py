@@ -133,7 +133,7 @@ async def get_homepage(request: Request):
             <a href="{request.url_for("trigger_script_stop")}">Stop Livestream</a>
             <p id="scriptStatus">Livestream Status: Loading...</p>
             <h2>Latest Image</h2>
-            <img src="/images/sun2.png" alt="Latest Image" width="960" height="540">
+            <img src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
         </body>
     </html>
     """
