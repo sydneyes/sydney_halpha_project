@@ -43,5 +43,5 @@ To use this interface on a remote machine Python should be installed on the remo
 - Tkinter
 
 ## Python script
-The python script can be found [here]().
+The python script can be found [here](https://github.com/pmodwrc/halpha/blob/main/gui/livestream_gui.py).
 

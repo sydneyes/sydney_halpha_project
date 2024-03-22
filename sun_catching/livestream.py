@@ -46,6 +46,8 @@ while True:
                 text_image = image_processing(shifted_images)
                 output_path = '/home/pi/docs/halpha/sun_catching/sun.PNG'
                 cv2.imwrite(output_path, text_image)
+                output_path = '/home/pi/docs/halpha/api/images/sun.PNG'
+                cv2.imwrite(output_path, text_image)
                 #Loading the images to the websites
 
                 run_smbclient()
