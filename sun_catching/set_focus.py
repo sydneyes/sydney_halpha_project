@@ -22,3 +22,5 @@ for i in range(1000):
     cv2.imwrite(output_path, image)
     time.sleep(10)
 cam_control.close()
+
+    
