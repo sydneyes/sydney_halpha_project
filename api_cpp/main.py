@@ -55,7 +55,7 @@ def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), req
 def trigger_script_execution(request: Request, authorized: bool = Depends(authenticate_user)):
     if authorized == True:
         execute_script()
-        #return RedirectResponse(url="/")
+        return RedirectResponse(url="/")
     else:
         print("not authorized")
         return RedirectResponse(url="/")
