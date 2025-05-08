@@ -60,10 +60,11 @@ def trigger_script_execution(request: Request, authorized: bool = Depends(authen
         print("not authorized")
         return RedirectResponse(url="/")
     
-@app.get("/stop_script", response_class=HTMLResponse, dependencies=[Depends(authenticate_user)])
+@app.get("/stop_script", response_class=JSONResponse, dependencies=[Depends(authenticate_user)])
 def trigger_script_stop(request: Request):
     stop_script()
-    return RedirectResponse(url="/")
+    script_status = "Running" if is_script_running(target_script) else "Not Running"
+    return {"status": script_status}
 
 @app.get("/get_status", response_class=JSONResponse)
 def get_script_status():
@@ -122,8 +123,22 @@ async def get_homepage(request: Request):
             <p>Click the link below to trigger the script:</p>
             <a href="{request.url_for("trigger_script_execution")}">Start Livestream</a>
             <p>Click the link below to stop the script:</p>
-            <a href="{request.url_for("trigger_script_stop")}">Stop Livestream</a>
+            <a href="#" onclick="stopLivestream()">Stop Livestream</a>
             <p id="scriptStatus">Livestream Status: Loading...</p>
+
+            <script>
+                async function stopLivestream() {
+                    try {
+                    // Call the stop_script endpoint
+                    const response = await fetch("/stop_script");
+                    const data = await response.json();
+                    // Update the status immediately
+                    updateStatus(data.status);
+                } catch (error) {
+                    console.error("Error stopping the script:", error);
+                }
+        }
+    </script>
             <h2>Latest Image</h2>
             <img src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
         </body>
