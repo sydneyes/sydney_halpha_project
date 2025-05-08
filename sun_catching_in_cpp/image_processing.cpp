@@ -224,12 +224,12 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     // Add the date and time
     std::string date_time_text = "Halpha " + std::string(time_buffer);
-    cv::putText(result, date_time_text, cv::Point(1300, 50), 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, date_time_text, cv::Point(1300, 50), cv::FONT_HERSHEY_COMPLEX, 1.0, cv::Scalar(255,255,255));
 
-    cv::putText(result, "N", cv::Point(center_x, center_y - radius - 20), 1.0, cv::Scalar(255,255,255));
-    cv::putText(result, "S", cv::Point(center_x, center_y + radius + 40), 1.0, cv::Scalar(255,255,255));
-    cv::putText(result, "E", cv::Point(center_x + radius + 40, center_y), 1.0, cv::Scalar(255,255,255));
-    cv::putText(result, "W", cv::Point(center_x - radius - 40, center_y), 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "N", cv::Point(center_x, center_y - radius - 20), cv::FONT_HERSHEY_COMPLEX, 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "S", cv::Point(center_x, center_y + radius + 40), cv::FONT_HERSHEY_COMPLEX, 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "E", cv::Point(center_x + radius + 40, center_y), cv::FONT_HERSHEY_COMPLEX, 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "W", cv::Point(center_x - radius - 40, center_y), cv::FONT_HERSHEY_COMPLEX, 1.0, cv::Scalar(255,255,255));
 
     return result;
     }
