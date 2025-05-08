@@ -165,7 +165,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     raw_image.convertTo(raw_image, CV_8U);     
 
     //Getting the average of the to stacked images (raw and with shadow correction)
-    cv::Mat mean, normalize;
+    cv::Mat mean, normalized;
     cv::addWeighted(raw_image, 0.5, raw_gaus_image, 0.5, 0.0, mean);
     cv::normalize(mean, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
 
@@ -212,7 +212,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     // Adding text annotations
     //std::string date_time = "Date: " + std::to_string(2025) + "-05-06"; 
-    cv::putText(result, "PMOD/WRC Davos", cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0);
+    cv::putText(result, "PMOD/WRC Davos", cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255,255,255));
 
 
 
@@ -224,12 +224,12 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     // Add the date and time
     std::string date_time_text = "Halpha " + std::string(time_buffer);
-    cv::putText(result, date_time_text, cv::Point(1300, 50), 1.0);
+    cv::putText(result, date_time_text, cv::Point(1300, 50), 1.0, cv::Scalar(255,255,255));
 
-    cv::putText(result, "N", cv::Point(center_x, center_y - radius - 20), 1.0);
-    cv::putText(result, "S", cv::Point(center_x, center_y + radius + 40), 1.0);
-    cv::putText(result, "E", cv::Point(center_x + radius + 40, center_y), 1.0);
-    cv::putText(result, "W", cv::Point(center_x - radius - 40, center_y), 1.0);
+    cv::putText(result, "N", cv::Point(center_x, center_y - radius - 20), 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "S", cv::Point(center_x, center_y + radius + 40), 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "E", cv::Point(center_x + radius + 40, center_y), 1.0, cv::Scalar(255,255,255));
+    cv::putText(result, "W", cv::Point(center_x - radius - 40, center_y), 1.0, cv::Scalar(255,255,255));
 
     return result;
     }
