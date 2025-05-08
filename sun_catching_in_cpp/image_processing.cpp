@@ -1,3 +1,4 @@
+#include "image_processing.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/photo.hpp> //maybe not needed (from mergemertens)
 #include <vector>
