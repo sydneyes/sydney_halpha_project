@@ -11,7 +11,7 @@
 cv::Mat apply_clip_lut(const cv::Mat& img, float min_val, float max_val) {
     // Create the LUT: a 256-element array where each value is clipped to [min_val, max_val]
     cv::Mat lut(1, 256, CV_8U);
-    for (int i = 0; i < 256; ++i) {
+    for (float i = 0; i < 256; ++i) {
         lut.at<float>(i) = std::min(std::max(i, min_val), max_val);   //[min,min,min..i,i,i,i,..max,max,max]
     }
 
@@ -30,7 +30,7 @@ cv::Mat stretch_contrast(const cv::Mat& raw_image) {
     // Compute histogram
     int histSize = 50; //todo: optimise parameter (up to 256 bins)
     float range[] = { 0, 256 }; //[0,255]
-    const float* histRange = { range };
+    const float* histRange[] = { range };
     cv::Mat hist;
 
     cv::calcHist(&raw_image, 1, 0, cv::Mat(), hist, 1, &histSize, histRange, true, false);
@@ -42,13 +42,16 @@ cv::Mat stretch_contrast(const cv::Mat& raw_image) {
     // Compute cumulative distribution (CDF)
     std::vector<float> cdf(histSize, 0.0f);
     cdf[0] = hist.at<float>(0);
-    for (int i = 1; i < histSize; ++i)
+    for (int i = 1; i < histSize; ++i){
         cdf[i] = cdf[i - 1] + hist.at<float>(i);
-
+    }
     //possible to speedup?
-    float total = img.total();
+    float total = raw_image.total();
+
 
     //tresholds: 5% (0.01) on the lower end, 95% (0.999) on the upper end (0.5/0.01 = 50)
+    int lower_index = 0;
+    int upper_index = 0;
     for (int i = 0; i < histSize; ++i) {
         if (cdf[i] >= 0.01 * total) { lower_index = i; break; }
     }
@@ -62,7 +65,7 @@ cv::Mat stretch_contrast(const cv::Mat& raw_image) {
     float max_val =  upper_index * bin_width;
 
     // Apply contrast stretching
-    cv::Mat streched = apply_clip_lut(img,  min_val,  max_val);
+    cv::Mat clipped = apply_clip_lut(raw_image,  min_val,  max_val);
     //cv::min(img, max_val, clipped);  //if LUT approach doesnt work
     //cv::max(clipped, min_val, clipped);
 
@@ -155,12 +158,13 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     raw_image.convertTo(raw_image, CV_8U);     
 
     //Getting the average of the to stacked images (raw and with shadow correction)
-    cv::Mat stacked_image;
+    cv::Mat mean;
     cv::addWeighted(raw_image, 0.5, raw_gaus_image, 0.5, 0.0, mean);
     cv::normalize(mean, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
 
 
     // Finding the center of the sun
+    cv::Vec3f circle;
     cv::HoughCircles(mean, circle, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 470, 480);
 
     if (circle.empty()) {
@@ -199,7 +203,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     // Adding text annotations
     //std::string date_time = "Date: " + std::to_string(2025) + "-05-06"; 
-    cv::putText(result, 'PMOD/WRC Davos', cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0);
+    cv::putText(result, "PMOD/WRC Davos", cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0);
 
 
 
