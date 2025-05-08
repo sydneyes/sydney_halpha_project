@@ -127,17 +127,17 @@ async def get_homepage(request: Request):
             <p id="scriptStatus">Livestream Status: Loading...</p>
 
             <script>
-                async function stopLivestream() {
-                    try {
-                    // Call the stop_script endpoint
-                    const response = await fetch("/stop_script");
-                    const data = await response.json();
-                    // Update the status immediately
-                    updateStatus(data.status);
-                } catch (error) {
-                    console.error("Error stopping the script:", error);
-                }
-        }
+                async function stopLivestream() {{
+                    try {{
+                        // Call the stop_script endpoint
+                        const response = await fetch("/stop_script");
+                        const data = await response.json();
+                        // Update the status immediately
+                        updateStatus(data.status);
+                    }} catch (error) {{
+                        console.error("Error stopping the script:", error);
+                    }}
+                }}
     </script>
             <h2>Latest Image</h2>
             <img src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
