@@ -68,8 +68,8 @@ cv::Mat stretch_contrast(const cv::Mat& raw_image) {
     cv::Mat clipped = apply_clip_lut(raw_image,  min_val,  max_val);
     //cv::min(img, max_val, clipped);  //if LUT approach doesnt work
     //cv::max(clipped, min_val, clipped);
-
-    stretched = (clipped - min_val) * (255 / (max_val - min_val));
+    
+    cv::Mat stretched = (clipped - min_val) * (255 / (max_val - min_val));
     stretched.convertTo(stretched, CV_8U);  // Final 8-bit result
 
     return stretched;
@@ -110,12 +110,19 @@ int plot_values_for_radii(const cv::Mat& image, int center_x, int center_y, int 
 }
 
 */
+
+/*
+optimisation: only calculate mask every 10 times
+static cv::Mat mask = create_mask(image.size(), center_x, center_y, radius);
+cv::Mat black;
+normalized.copyTo(black, mask);*/
 cv::Mat set_values_outside_radius_to_zero_mask(const cv::Mat& image, int center_x, int center_y, int radius) {
     cv::Mat mask = cv::Mat::zeros(image.size(), CV_8U);
     cv::circle(mask, cv::Point(center_x, center_y), radius, cv::Scalar(255), -1); // filled white circle, possible optimisation: only calculate mask once for all images
     cv::Mat result;
     image.copyTo(result, mask); // copy only where mask is white
     return result;
+    
 }
 
 /*
@@ -136,7 +143,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
         cv::Mat blurred, corrected, normalized;
         cv::GaussianBlur(img, blurred, cv::Size(256, 256), 64);
         //are really 32 bit needed?
-        cv::divide(img, blurred, corrected, 1, CV_32F);
+        cv::divide(img, blurred, corrected, 1, CV_8U);
         cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
         cv::Mat streched = stretch_contrast(normalized); // Apply contrast stretching
         corrected_images.push_back(streched);
@@ -158,37 +165,39 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     raw_image.convertTo(raw_image, CV_8U);     
 
     //Getting the average of the to stacked images (raw and with shadow correction)
-    cv::Mat mean;
+    cv::Mat mean, normalize;
     cv::addWeighted(raw_image, 0.5, raw_gaus_image, 0.5, 0.0, mean);
     cv::normalize(mean, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
 
 
     // Finding the center of the sun
-    cv::Vec3f circle;
-    cv::HoughCircles(mean, circle, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 470, 480);
+    std::vector<cv::Vec3f> circles;
+    cv::HoughCircles(normalized, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 470, 480);
 
-    if (circle.empty()) {
+    if (circles.empty()) {
         throw std::runtime_error("No circle detected in the image.");
     }
 
-    int center_x = static_cast<int>(circle[0][0]);
-    int center_y = static_cast<int>(circle[0][1]);
+    cv::Vec3f circle = circles[0];
+
+    int center_x = static_cast<int>(circle[0]);
+    int center_y = static_cast<int>(circle[1]);
 
     // Setting values outside the sun to zero
     //int min_radius = plot_values_for_radii(stacked_image, center_x, center_y, 400, 600, 1000) + 20;
     //cv::Mat result = set_values_outside_radius_to_zero(stacked_image, center_x, center_y, min_radius);
 
     //use possibly more efficient approach to black out pixels around the sun
-    int radius = static_cast<int>(circle[0][2]) + 30; //need to optimise the +30 parameter
-    cv::Mat black = set_values_outside_radius_to_zero_mask(circle, center_x, center_y, radius);
+    int radius = static_cast<int>(circle[2]) + 30; //need to optimise the +30 parameter
+    cv::Mat black = set_values_outside_radius_to_zero_mask(normalized, center_x, center_y, radius);
 
     //is commented out streching program in python version relevant? check with python first
 
     //also, if telescope is adjusted correctly, there should be no need to center the sun, so also omitted for performance
 
 
-    cv::Mat normalized_image;
-    cv::normalize(black, normalized_image, 0, 255, cv::NORM_MINMAX, CV_8U);
+    cv::Mat normalized_image, result;
+    cv::normalize(black, normalized_image, 0, 255, cv::NORM_MINMAX, CV_8U); //is normalisation needed here?
 
     cv::applyColorMap(normalized_image, result, cv::COLORMAP_HOT); //is this colormap sufficient?
 
