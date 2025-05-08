@@ -22,7 +22,7 @@ USERNAME = "pi"
 PASSWORD = "halpha"
 
 target_script = 'solar_cam'
-target_script_path = "/home/pi/docs/halpha/sun_catching_in_cpp/solar_cam"
+target_script_path = "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam"
 
 def is_script_running(script_name):
     command = f"pgrep -f '{script_name}'"

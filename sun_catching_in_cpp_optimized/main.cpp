@@ -88,7 +88,7 @@ int main() {
     }
 
     // Save the final processed image
-    std::string output_path = "/home/pi/docs/halpha/api_cpp/images/sun.PNG";
+    std::string output_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/sun.PNG";
     cv::imwrite(output_path, processed_image);
     //std::cout << "Processed image saved to: " << output_path << std::endl;
 
