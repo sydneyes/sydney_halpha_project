@@ -34,10 +34,20 @@ def execute_script():
     
 def stop_script():
     try:
-        subprocess.run(["pkill", "-f", target_script_path])
+        # Use pkill with sudo to ensure sufficient permissions
+        result = subprocess.run(["sudo", "pkill", "-f", target_script_path], capture_output=True, text=True)
+        if result.returncode != 0:
+            logging.warning(f"pkill failed: {result.stderr}")
+            # Fallback: Find the process ID manually and kill it
+            pid_result = subprocess.run(["pgrep", "-f", target_script_path], capture_output=True, text=True)
+            if pid_result.returncode == 0:
+                pids = pid_result.stdout.strip().split("\n")
+                for pid in pids:
+                    subprocess.run(["sudo", "kill", "-9", pid])
+            else:
+                logging.error(f"Failed to find process: {pid_result.stderr}")
     except Exception as e:
         logging.error(f"Error stopping script: {e}")
-
 
 #simple login, if password is wrong, you probably need to open another tab
 def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), request: Request = None):
