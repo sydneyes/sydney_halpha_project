@@ -21,20 +21,6 @@ PASSWORD = "halpha"
 target_script = 'solar_cam'
 target_script_path = "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam"
 
-def is_camera_connected():
-    try:
-        # Run the camera initialization command or check for connected cameras
-        command = f"/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam --check-camera"
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        if "Found camera" in result.stdout:
-            logging.info("Camera is connected.")
-            return True
-        else:
-            logging.warning("Camera is not connected.")
-            return False
-    except Exception as e:
-        logging.error(f"Error checking camera connection: {e}")
-        return False
     
 def is_script_running(script_name):
     command = f"pgrep -f '^{script_name}$'"
@@ -79,11 +65,6 @@ def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), req
     return True
 
 
-@app.get("/camera_status", response_class=JSONResponse)
-def get_camera_status():
-    camera_status = "Connected" if is_camera_connected() else "Not Connected"
-    return {"camera_status": camera_status}
-
 @app.get("/execute_script", response_class=HTMLResponse)
 def trigger_script_execution(request: Request, authorized: bool = Depends(authenticate_user)):
     if authorized == True:
@@ -112,33 +93,13 @@ async def get_homepage(request: Request):
         <head>
             <title>Halpha Livestream</title>
             <script>
-                // Function to update the camera status on the webpage
-                function updateCameraStatus(newStatus) {{
-                    document.getElementById("cameraStatus").innerText = "Camera Status: " + newStatus;
-                }}
+                
                 // Function to update the script status on the webpage
                 function updateStatus(newStatus) {{
                     document.getElementById("scriptStatus").innerText = "Script Status: " + newStatus;
                 }}
 
                 // Function to periodically fetch the script status from the server
-                async function pollCameraStatus() {{
-                    let lastStatus = null;
-                    while (true) {{
-                        try {{
-                            const response = await fetch("/camera_status");
-                            const data = await response.json();
-                            if (data.camera_status !== lastStatus) {{
-                                updateCameraStatus(data.camera_status);
-                                lastStatus = data.camera_status;
-                            }}
-                        }} catch (error) {{
-                            console.error("Error fetching camera status:", error);
-                        }}
-                        await new Promise(resolve => setTimeout(resolve, 5000));
-                    }}
-                }}
-
                 async function pollScriptStatus() {{
                     let lastStatus = null;
                     while (true) {{
@@ -157,15 +118,6 @@ async def get_homepage(request: Request):
                 }}
             window.onload = async function () {{
             try {{
-                // Fetch the initial camera status
-                const cameraResponse = await fetch("/camera_status");
-                const cameraData = await cameraResponse.json();
-                updateCameraStatus(cameraData.camera_status);
-            }} catch (error) {{
-                console.error("Error fetching initial camera status:", error);
-            }}
-
-            try {{
                 // Fetch the initial script status
                 const scriptResponse = await fetch("/get_status");
                 const scriptData = await scriptResponse.json();
@@ -174,15 +126,13 @@ async def get_homepage(request: Request):
                 console.error("Error fetching initial script status:", error);
             }}
 
-            // Start polling for camera and script statuses
-            pollCameraStatus();
+            // Start polling for script status
             pollScriptStatus();
             }};
             </script>
         </head>
         <body>
             <h1>Halpha livestream PMOD/WRC Davos</h1>
-            <p id="cameraStatus">Camera Status: Loading...</p>
             <p>Click the link below to trigger the script:</p>
             <a href="{request.url_for("trigger_script_execution")}">Start Livestream</a>
             <p>Click the link below to stop the script:</p>
