@@ -7,7 +7,15 @@ import uvicorn
 import logging
 
 
+# Configure logging to write to a file
+logging.basicConfig(
+    filename="app.log",  # Log file name
+    level=logging.INFO,  # Log level (INFO, WARNING, ERROR, etc.)
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Log format
+)
 
+# Example log message
+logging.info("Logging is configured. Logs will be written to app.log.")
 
 
 app = FastAPI()
