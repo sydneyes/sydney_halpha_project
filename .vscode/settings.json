@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "fstream": "cpp",
-        "xlocmes": "cpp"
+        "xlocmes": "cpp",
+        "xstring": "cpp"
     }
 }
