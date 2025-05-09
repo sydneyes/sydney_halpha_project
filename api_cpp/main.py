@@ -33,7 +33,7 @@ target_script = 'solar_cam'
 target_script_path = "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam"
 
 def is_script_running(script_name):
-    command = f"pgrep -f '{script_name}'"
+    command = f"pgrep -f '^{script_name}$'"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     return result.returncode == 0
      
