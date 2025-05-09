@@ -30,8 +30,16 @@ def is_script_running(script_name):
     return result.returncode == 0
      
 def execute_script():
-    subprocess.Popen([target_script_path])
-    
+    if is_script_running(target_script_path):
+        logging.warning("Script is already running. Not starting a new instance.")
+        return
+    try:
+        subprocess.Popen([target_script_path])
+        logging.info("Script started successfully.")
+    except Exception as e:
+        logging.error(f"Error starting script: {e}")
+
+
 def stop_script():
     try:
         # Use pkill with sudo to ensure sufficient permissions
@@ -73,13 +81,13 @@ def trigger_script_execution(request: Request, authorized: bool = Depends(authen
 @app.get("/stop_script", response_class=JSONResponse, dependencies=[Depends(authenticate_user)])
 def trigger_script_stop(request: Request):
     stop_script()
-    script_status = "Running" if is_script_running(target_script) else "Not Running"
+    script_status = "Running" if is_script_running(target_script_path) else "Not Running"
     return {"status": script_status}
 
 @app.get("/get_status", response_class=JSONResponse)
 def get_script_status():
     print(is_script_running(target_script))
-    script_status = "Running" if is_script_running(target_script) else "Not Running"
+    script_status = "Running" if is_script_running(target_script_path) else "Not Running"
     return {"status": script_status}
 
 @app.get("/", response_class=HTMLResponse)
