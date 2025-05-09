@@ -14,9 +14,12 @@ int main(){
         return 1;
     }
 
-    std::cout<< "what exposure time do you want? (if you dont know, start with 400)";
+    std::cout<< "what exposure time do you want? (if you dont know, start with 400): ";
     int exposure_time;
     std::cin>> exposure_time;
+    std::cout<< "what refresh rate do you want? [ms]: ";
+    int time;
+    std::cin>> time;
     int gain = 20;
     int offset = 6;
     cv::Mat image;
@@ -24,7 +27,7 @@ int main(){
         camera.capture_frame(exposure_time, gain, offset, image);
         std::string output_path = "test_focus.tiff";
         cv::imwrite(output_path, image);
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(time));
     }
     camera.close();
     return 0;
