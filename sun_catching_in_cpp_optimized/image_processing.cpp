@@ -7,8 +7,17 @@
 #include <numeric>
 #include <iostream>
 #include <ctime>  //could also use the internal pmod timeserver: server ntp1.pmodwrc.ch/ntp2.pmodwrc.ch
+#include <omp.h>
 
 //todo: performance increace: calculate LUT only all 10 Images
+/*
+for (size_t i = 0; i < images.size(); ++i) {
+    if (i % 10 == 0) {
+        // Recompute LUT here
+    }
+    // Apply LUT to the image
+}
+*/
 cv::Mat apply_clip_lut(const cv::Mat& img, float min_val, float max_val) {
     // Create the LUT: a 256-element array where each value is clipped to [min_val, max_val]
     cv::Mat lut(1, 256, CV_8U);
@@ -23,14 +32,9 @@ cv::Mat apply_clip_lut(const cv::Mat& img, float min_val, float max_val) {
 
 
 cv::Mat stretch_contrast(const cv::Mat& raw_image) {
-    // Assume raw_image is CV_8U or CV_32F (you can adapt accordingly)
-
-
-
-
     // Compute histogram
-    int histSize = 50; //todo: optimise parameter (up to 256 bins)
-    float range[] = { 0, 256 }; //[0,255]
+    int histSize = 50;    //todo: optimise parameter (up to 256 bins)
+    float range[] = { 0, 256 };    //[0,255]
     const float* histRange[] = { range };
     cv::Mat hist;
 
@@ -42,9 +46,9 @@ cv::Mat stretch_contrast(const cv::Mat& raw_image) {
 
     // Compute cumulative distribution (CDF)
     std::vector<float> cdf(histSize, 0.0f);
-    cdf[0] = hist.at<float>(0);
+    cdf[0] = static_cast<int>(hist.at<float>(0));
     for (int i = 1; i < histSize; ++i){
-        cdf[i] = cdf[i - 1] + hist.at<float>(i);
+        cdf[i] = cdf[i - 1] + static_cast<int>(hist.at<float>(i));
     }
     //possible to speedup?
     float total = raw_image.total();
@@ -127,6 +131,7 @@ cv::Mat set_values_outside_radius_to_zero_mask(const cv::Mat& image, int center_
 }
 
 /*
+more configurable colormap
 cv::Mat create_halpha_colormap() {
     cv::Mat colormap(256, 1, CV_8UC3); // 256 levels, 1 column, 3 channels (BGR)
     for (int i = 0; i < 256; ++i) {
@@ -138,18 +143,18 @@ cv::Mat create_halpha_colormap() {
 
 //todo: look if shading is needed by comparing images with and without shading correction
 cv::Mat process_image(const std::vector<cv::Mat>& images) {
-    // Gaussian filtering and shadow correction
-    std::vector<cv::Mat> corrected_images;
-    for (const auto& img : images) {
-        cv::Mat blurred, corrected, normalized;
-        cv::GaussianBlur(img, blurred, cv::Size(256, 256), 64);
-        //are really 32 bit needed?
-        cv::divide(img, blurred, corrected, 1, CV_8U);
-        cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
-        cv::Mat streched = stretch_contrast(normalized); // Apply contrast stretching
-        corrected_images.push_back(streched);
-    }
+    // Gaussian filtering and shadow correction, possible performance improvement: first merge images then correct, but need to test for image quality
+    N = images.size()
+    std::vector<cv::Mat> corrected_images(N);
 
+    #pragma omp parallel for
+    for (size_t i = 0; i < N; ++i) {
+        cv::Mat blurred, corrected, normalized;
+        cv::GaussianBlur(images[i], blurred, cv::Size(256, 256), 64);
+        cv::divide(images[i], blurred, corrected, 1, CV_8U);
+        cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
+        corrected_images[i] = stretch_contrast(normalized);  // Direct assignment to pre-allocated vector
+    }
     // Stacking the gaus images
     cv::Mat raw_gaus_image;
     cv::Ptr<cv::MergeMertens> merge = cv::createMergeMertens();
@@ -193,13 +198,11 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     cv::Mat black = set_values_outside_radius_to_zero_mask(normalized, center_x, center_y, radius);
 
     //is commented out streching program in python version relevant? check with python first
-
     //also, if telescope is adjusted correctly, there should be no need to center the sun, so also omitted for performance
 
 
     cv::Mat normalized_image, result;
     cv::normalize(black, normalized_image, 0, 255, cv::NORM_MINMAX, CV_8U); //is normalisation needed here?
-
     cv::applyColorMap(normalized_image, result, cv::COLORMAP_HOT); //is this colormap sufficient?
 
     // Create a custom colormap (black to red gradient)
