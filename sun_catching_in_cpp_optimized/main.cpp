@@ -45,7 +45,7 @@ void capture_thread(CameraControl& camera, const std::vector<int>& exposure_time
         }
 
         // Normalize and convert to 8-bit
-        cv::UMat image8bit;
+        cv::Mat image8bit; //could use cv::UMat for GPU acceleration
         cv::normalize(image, image8bit, 0, 255, cv::NORM_MINMAX);
         image8bit.convertTo(image8bit, CV_8U);
 
@@ -62,7 +62,7 @@ void capture_thread(CameraControl& camera, const std::vector<int>& exposure_time
                 }
 
                 std::lock_guard<std::mutex> qlock(queue_mutex);
-                processing_queue.push(std::move(window));
+                processing_queue.push_back(std::move(window));
                 queue_cv.notify_one();
             }
         }
@@ -105,7 +105,7 @@ void processing_worker(int id) {
 
 int main() {
     const std::string cam_id = "QHY5III200M-c8764d41ba464ec75";
-    CameraControl camera;
+    CameraControl camera(cam_id);
 
     if (!camera.initialize()) {
         std::cerr << "Camera initialization failed." << std::endl;
