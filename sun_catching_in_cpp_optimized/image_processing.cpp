@@ -152,12 +152,12 @@ cv::Mat create_halpha_colormap() {
 //todo: look if shading is needed by comparing images with and without shading correction
 cv::Mat process_image(const std::vector<cv::Mat>& images) {
     // Gaussian filtering and shadow correction, possible performance improvement: first merge images then correct, but need to test for image quality
-    N = images.size()
+    int N = images.size();
     std::vector<cv::Mat> corrected_images(N);
 
     #pragma omp parallel for
     for (size_t i = 0; i < N; ++i) {
-        cv::UMat blurred, corrected, normalized;
+        cv::Mat blurred, corrected, normalized; //can do cv::UMat here later
         cv::GaussianBlur(images[i], blurred, cv::Size(256, 256), 64); //cv::blus od cv::boxFilter is much faster..need to test
         cv::divide(images[i], blurred, corrected, 1, CV_8U);
         cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
