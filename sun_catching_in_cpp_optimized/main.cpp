@@ -45,7 +45,7 @@ void capture_thread(CameraControl& camera, const std::vector<int>& exposure_time
         }
 
         // Normalize and convert to 8-bit
-        cv::Mat image8bit;
+        cv::UMat image8bit;
         cv::normalize(image, image8bit, 0, 255, cv::NORM_MINMAX);
         image8bit.convertTo(image8bit, CV_8U);
 

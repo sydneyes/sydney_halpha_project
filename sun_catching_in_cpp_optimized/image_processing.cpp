@@ -9,6 +9,14 @@
 #include <ctime>  //could also use the internal pmod timeserver: server ntp1.pmodwrc.ch/ntp2.pmodwrc.ch
 #include <omp.h>
 
+/*
+timing measurement:
+double t0 = (double)cv::getTickCount();
+//processing...
+double t1 = (double)cv::getTickCount();
+std::cout << "Time: " << (t1 - t0) / cv::getTickFrequency() << "s" << std::endl;
+*/
+
 //todo: performance increace: calculate LUT only all 10 Images
 /*
 for (size_t i = 0; i < images.size(); ++i) {
@@ -149,8 +157,8 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     #pragma omp parallel for
     for (size_t i = 0; i < N; ++i) {
-        cv::Mat blurred, corrected, normalized;
-        cv::GaussianBlur(images[i], blurred, cv::Size(256, 256), 64);
+        cv::UMat blurred, corrected, normalized;
+        cv::GaussianBlur(images[i], blurred, cv::Size(256, 256), 64); //cv::blus od cv::boxFilter is much faster..need to test
         cv::divide(images[i], blurred, corrected, 1, CV_8U);
         cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
         corrected_images[i] = stretch_contrast(normalized);  // Direct assignment to pre-allocated vector

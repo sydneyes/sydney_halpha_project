@@ -9,9 +9,7 @@
 //calulate shift based on first image
 std::vector<cv::Point2f> calculate_shifts(const std::vector<cv::Mat>& raw_data, const std::string& log_file_path) {
     int N = raw_data.size();
-    std::vector<cv::Point2f> centers;
-    centers.reserve(N);
-
+    std::vector<cv::Point2f> centers(N);
     #pragma omp parallel for
     for (size_t i = 0; i < raw_data.size(); ++i) {
         cv::Mat image = raw_data[i];
