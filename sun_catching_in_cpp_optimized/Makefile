@@ -16,7 +16,7 @@ else
 endif
 
 
-LDFLAGS = `pkg-config --libs opencv4` -lqhyccd
+LDFLAGS = -fopenmp `pkg-config --libs opencv4` -lqhyccd
 
 
 OBJS = $(SRCS:.cpp=.o)
