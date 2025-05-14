@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Request, HTTPException, Depends, status
+from fastapi import FastAPI, Request, HTTPException, Depends, status, Form
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 import subprocess
 import uvicorn
 import logging
+import psutil
 
 
 app = FastAPI()
@@ -21,30 +22,39 @@ PASSWORD = "halpha"
 target_script = 'solar_cam'
 target_script_path = "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam"
 
+SCRIPT_OPTIONS = {
+    "standard": {
+        "name": "solar_cam",
+        "path": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam",
+        "dir": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp"
+    },
+    "optimized": {
+        "name": "solar_cam",
+        "path": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp_optimized/solar_cam",
+        "dir": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp_optimized"
+    }
+}
+
+current_script = None
+current_args = []
+
     
-def is_script_running(script_name):
-    command = f"pgrep -f '^{script_name}$'"
+def is_script_running(script_path):
+    command = f"pgrep -f '^{script_path}$'"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     return result.returncode == 0
-     
-def execute_script():
-    if is_script_running(target_script_path):
-        logging.warning("Script is already running. Not starting a new instance.")
-        return
-    try:
-        subprocess.Popen([target_script_path])
-        logging.info("Script started successfully.")
-    except Exception as e:
-        logging.error(f"Error starting script: {e}")
-
 
 def stop_script():
+    global current_script
+    if not current_script:
+        logging.info("No script currently tracked.")
+        return
     try:
-        result = subprocess.run(["pkill", "-f", target_script_path], capture_output=True, text=True)
+        result = subprocess.run(["pkill", "-f", current_script], capture_output=True, text=True)
         if result.returncode != 0:
             logging.warning(f"pkill failed: {result.stderr}")
             # Fallback: Find the process ID manually and kill it
-            pid_result = subprocess.run(["pgrep", "-f", target_script_path], capture_output=True, text=True)
+            pid_result = subprocess.run(["pgrep", "-f", current_script], capture_output=True, text=True)
             if pid_result.returncode == 0:
                 pids = pid_result.stdout.strip().split("\n")
                 for pid in pids:
@@ -53,6 +63,35 @@ def stop_script():
                 logging.error(f"Failed to find process: {pid_result.stderr}")
     except Exception as e:
         logging.error(f"Error stopping script: {e}")
+
+
+def execute_script(script_key, args):
+    global current_script, current_args
+    script_info = SCRIPT_OPTIONS.get(script_key)
+
+    if not script_info:
+        logging.error("Invalid script key.")
+        return
+    
+     # Stop previous if running
+    stop_script() 
+
+    # Compile if not already built
+    try:
+        subprocess.run(["make"], cwd=script_info["dir"], check=True)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Build failed: {e}")
+        return
+
+    # Start new
+    try:
+        current_script = script_info["path"]
+        current_args = args
+        subprocess.Popen([current_script] + args)
+        logging.info(f"Started {current_script} with args {args}")
+    except Exception as e:
+        logging.error(f"Error starting script: {e}")
+
 
 #simple login, if password is wrong, you probably need to open another tab
 def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), request: Request = None):
@@ -64,16 +103,29 @@ def authenticate_user(credentials: HTTPBasicCredentials = Depends(security), req
         )
     return True
 
-
-@app.get("/execute_script", response_class=HTMLResponse)
-def trigger_script_execution(request: Request, authorized: bool = Depends(authenticate_user)):
+@app.post("/start", response_class=RedirectResponse)
+async def handle_start_script(
+    request: Request,
+    authorized: bool = Depends(authenticate_user),
+    script_type: str = Form(...),
+    threads: int = Form(...),
+    exposure: int = Form(...),
+    nimages: int = Form(...)
+):
     if authorized == True:
-        execute_script()
-        return RedirectResponse(url="/")
+        args = [
+            f"--threads={threads}",
+            f"--exposure={exposure}",
+            f"--nimages={nimages}"
+        ]
+        execute_script(script_type, args)
+        return RedirectResponse(url="/", status_code=303)
     else:
         print("not authorized")
         return RedirectResponse(url="/")
     
+
+
 @app.get("/stop_script", response_class=JSONResponse, dependencies=[Depends(authenticate_user)])
 def trigger_script_stop(request: Request):
     stop_script()
@@ -86,6 +138,10 @@ def get_script_status():
     script_status = "Running" if is_script_running(target_script_path) else "Not Running"
     return {"status": script_status}
 
+@app.get("/cpu", response_class=JSONResponse)
+def get_cpu_usage():
+    return {"cpu_percent": psutil.cpu_percent(interval=None)}
+
 @app.get("/", response_class=HTMLResponse)
 async def get_homepage(request: Request):
     return f"""
@@ -93,13 +149,13 @@ async def get_homepage(request: Request):
         <head>
             <title>Halpha Livestream</title>
             <script>
-                
-                // Function to update the script status on the webpage
+                let refreshInterval = 5000;
+                let imageIntervalId = null;
+
                 function updateStatus(newStatus) {{
                     document.getElementById("scriptStatus").innerText = "Script Status: " + newStatus;
                 }}
 
-                // Function to periodically fetch the script status from the server
                 async function pollScriptStatus() {{
                     let lastStatus = null;
                     while (true) {{
@@ -116,47 +172,96 @@ async def get_homepage(request: Request):
                         await new Promise(resolve => setTimeout(resolve, 5000));
                     }}
                 }}
-            window.onload = async function () {{
-            try {{
-                // Fetch the initial script status
-                const scriptResponse = await fetch("/get_status");
-                const scriptData = await scriptResponse.json();
-                updateStatus(scriptData.status);
-            }} catch (error) {{
-                console.error("Error fetching initial script status:", error);
-            }}
 
-            // Start polling for script status
-            pollScriptStatus();
-            }};
-            </script>
-        </head>
-        <body>
-            <h1>Halpha livestream PMOD/WRC Davos</h1>
-            <p>Click the link below to trigger the script:</p>
-            <a href="{request.url_for("trigger_script_execution")}">Start Livestream</a>
-            <p>Click the link below to stop the script:</p>
-            <a href="#" onclick="stopLivestream()">Stop Livestream</a>
-            <p id="scriptStatus">Livestream Status: Loading...</p>
+                async function pollCpuUsage() {{
+                    while (true) {{
+                        try {{
+                            const response = await fetch("/cpu");
+                            const data = await response.json();
+                            document.getElementById("cpuStatus").innerText = "CPU Usage: " + data.cpu_percent + "%";
+                        }} catch (error) {{
+                            console.error("Error fetching CPU usage:", error);
+                        }}
+                        await new Promise(resolve => setTimeout(resolve, 5000));
+                    }}
+                }}
 
-            <script>
                 async function stopLivestream() {{
                     try {{
-                        // Call the stop_script endpoint
                         const response = await fetch("/stop_script");
                         const data = await response.json();
-                        // Update the status immediately
                         updateStatus(data.status);
                     }} catch (error) {{
                         console.error("Error stopping the script:", error);
                     }}
                 }}
-    </script>
+
+                function startImageRefresh() {{
+                    if (imageIntervalId) {{
+                        clearInterval(imageIntervalId);
+                    }}
+                    imageIntervalId = setInterval(() => {{
+                        const img = document.getElementById("liveImage");
+                        img.src = `/images/sun.PNG?timestamp=${{Date.now()}}`;
+                    }}, refreshInterval);
+                }}
+
+                window.onload = function () {{
+                    // Initialize refresh interval input
+                    const input = document.getElementById("refreshIntervalInput");
+                    input.value = refreshInterval;
+                    input.addEventListener("change", () => {{
+                        const newValue = parseInt(input.value);
+                        if (!isNaN(newValue) && newValue > 0) {{
+                            refreshInterval = newValue;
+                            startImageRefresh();
+                        }}
+                    }});
+
+                    // Kick off all polling
+                    pollScriptStatus();
+                    pollCpuUsage();
+                    startImageRefresh();
+
+                    // Load initial status
+                    fetch("/get_status")
+                        .then(response => response.json())
+                        .then(data => updateStatus(data.status))
+                        .catch(error => console.error("Error fetching initial script status:", error));
+                }};
+            </script>
+        </head>
+        <body>
+            <h1>Halpha Livestream PMOD/WRC Davos</h1>
+            <h2>Start Livestream</h2>
+            <form action="/start" method="post">
+                <label>Script Version:</label>
+                <select name="script_type">
+                    <option value="standard">Standard</option>
+                    <option value="optimized">Optimized</option>
+                </select><br>
+                <label>Threads:</label><input type="number" name="threads" value="3" required><br>
+                <label>Exposure:</label><input type="number" name="exposure" value="500" required><br>
+                <label>nimages:</label><input type="number" name="nimages" value="10" required><br>
+                <button type="submit">Start</button>
+            </form>
+
+            <h2>Stop Livestream</h2>
+            <button onclick="stopLivestream()">Stop Script</button>
+
+            <p id="scriptStatus">Script Status: Loading...</p>
+            <p id="cpuStatus">CPU Usage: Loading...</p>
+
+            <h3>Set Image Refresh Interval (ms):</h3>
+            <input type="number" id="refreshIntervalInput" min="100">
+
             <h2>Latest Image</h2>
-            <img src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
+            <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
         </body>
     </html>
     """
+
+
 if __name__ == "__main__":
     # Run the FastAPI app using Uvicorn, listen on all available network interfaces
     uvicorn.run(app, host="0.0.0.0", port=8000)
@@ -166,3 +271,4 @@ if __name__ == "__main__":
 #http://172.16.8.52:8000/  to connect via a device in the network (works only when the main.py script is running on the raspi)
 #ip's change sometimes(maybe someone could configure a static ip) currently, the ip is 172.16.10.248
 #you can check the ip of the pi with an nmap scan (download nmap, type nmap -sn 172.16.0.0/12 in cmd)
+#or type in the pi console: hostname -I

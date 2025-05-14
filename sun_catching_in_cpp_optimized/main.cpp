@@ -16,13 +16,10 @@
 #include "image_processing.h"
 //final optimisation: overclocking the raspy 5..(need better cooling tho)
 
-const int N = 10;  //ring buffer size
+//todo: try flags -ffast-math, flto
 
-std::vector<cv::Mat> ring_buffer(N);
-int current_index = 0;
 bool buffer_filled = false;
-
-std::mutex buffer_mutex;
+std::mutex buffer_mutex; //maybe not needed: current program maybe already thread safe for buffer
 //std::condition_variable buffer_cv;
 std::atomic<bool> running(true);
 
@@ -31,16 +28,14 @@ std::mutex queue_mutex;
 std::condition_variable queue_cv;
 
 // Capture thread function
-void capture_thread(CameraControl& camera, const std::vector<int>& exposure_times, int gain, int offset) {
+void capture_thread(CameraControl& camera, const std::vector<int>& exposure_times, int gain, int offset, int nimages, std::vector<cv::Mat>& ring_buffer) {
     int i = 0;
-    int exp_size = exposure_times.size();
     while (running) {
         cv::Mat image;
-        int ring_index = i % N;
-        int exposure_index = i % exp_size;
+        int ring_index = i % nimages;
 
-        if (!camera.capture_frame(exposure_times[exposure_index], gain, offset, image)) {
-            std::cerr << "Capture failed at exposure index " << exposure_index << std::endl;
+        if (!camera.capture_frame(exposure_times[ring_index], gain, offset, image)) {
+            std::cerr << "Capture failed at ring index " << ring_index << std::endl;
             continue;
         }
 
@@ -51,14 +46,13 @@ void capture_thread(CameraControl& camera, const std::vector<int>& exposure_time
 
         {
             std::lock_guard<std::mutex> lock(buffer_mutex);
-            ring_buffer[ring_index] = std::move(image8bit);
-            current_index = ring_index;
-            if (i >= N - 1) buffer_filled = true;
+            image8bit.copyTo(ring_buffer[ring_index]);
+            if (i >= nimages - 1) buffer_filled = true;
 
             if (buffer_filled) {
-                std::vector<cv::Mat> window;
-                for (int j = 0; j < N; ++j) {
-                    window.push_back(ring_buffer[j].clone());
+                std::vector<cv::Mat> window(nimages);
+                for (int j = 0; j < nimages; ++j) {
+                    window[j] = ring_buffer[j].clone();
                 }
 
                 std::lock_guard<std::mutex> qlock(queue_mutex);
@@ -103,7 +97,7 @@ void processing_worker(int id) {
     }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     const std::string cam_id = "QHY5III200M-c8764d41ba464ec75";
     CameraControl camera(cam_id);
 
@@ -112,22 +106,66 @@ int main() {
         return 1;
     }
 
+  
+    int threads = 3;
+    int exposure = 500;
+    int nimages = 10;
+
+    static struct option long_options[] = {
+        {"threads", required_argument, nullptr, 't'},
+        {"exposure", required_argument, nullptr, 'e'},
+        {"nimages", required_argument, nullptr, 'n'},
+
+        {nullptr, 0, nullptr, 0}
+    };
+
+    int option_index = 0;
+    int opt;
+    while ((opt = getopt_long(argc, argv, "t:e:n:", long_options, &option_index)) != -1) {
+        switch (opt) {
+            
+            case 't':
+                threads = std::stoi(optarg);
+                if(threads < 1 || treads > 16){ //for the funny people...
+                    threads = 3;
+                }
+                break;
+            case 'e':
+                exposure = std::stoi(optarg);
+                break;
+            case 'n':
+                nimages = std::stoi(optarg);
+                if(nimages < 1 || nimages > 1000){
+                    nimages = 10;
+                }
+                break;
+            default:
+                std::cerr << "Usage: ./solar_cam  --threads <value> --exposure <value> --nimage<value>\n";
+                return 1;
+        }
+    }
+
     //can probably take shorter times to improve latency
-    std::vector<int> exposure_times = {500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300};
+    
+    std::vector<int> exposure_times(nimages);
+    for(int i = 0; i < nimages; ++i){
+        exposure_times[i] = exposure + 200 * i;
+    }
     int gain = 20;
     int offset = 6;
 
     int image_height = 100; //todo: get real values from set_focus optimized
     int image_width = 100;
-    for (int i = 0; i < N; ++i) {
-        ring_buffer[i] = cv::Mat(image_height, image_width, CV_8UC1);  //preallocate memory
+    std::vector<cv::Mat> ring_buffer(nimages);
+    for (int i = 0; i < nimages; ++i) {
+        ring_buffer[i].create(image_height, image_width, CV_8UC1);  //preallocate memory
     }
 
 
-    std::thread cap_thread(capture_thread, std::ref(camera), exposure_times, gain, offset); //std::ref needed because std::thread passes by copy without it (exposure_times doesnt need std::ref b.c it is const reference, whitch is faster than pass by copy)
+    std::thread cap_thread(capture_thread, std::ref(camera), exposure_times, gain, offset, nimages, std::ref(ring_buffer)); //std::ref needed because std::thread passes by copy without it (exposure_times doesnt need std::ref b.c it is const reference, whitch is faster than pass by copy)
 
     std::vector<std::thread> processing_threads;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < threads; ++i) {
         processing_threads.emplace_back(processing_worker, i);
     }
 
