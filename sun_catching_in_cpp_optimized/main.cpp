@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
             
             case 't':
                 threads = std::stoi(optarg);
-                if(threads < 1 || treads > 16){ //for the funny people...
+                if(threads < 1 || threads > 16){ //for the funny people...
                     threads = 3;
                 }
                 break;
