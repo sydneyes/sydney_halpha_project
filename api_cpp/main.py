@@ -38,7 +38,7 @@ current_args = []
 #def is_script_running(script_path):
 #    command = f"pgrep -f '^{script_path}$'"
 #    result = subprocess.run(command, shell=True, capture_output=True, text=True)
- #   return result.returncode == 0
+#    return result.returncode == 0
 
 def is_script_running(script_path):
     for proc in psutil.process_iter(['cmdline']):
@@ -143,6 +143,7 @@ def trigger_script_stop(request: Request):
 def get_script_status():
     status = "Running" if current_script and is_script_running(current_script) else "Not Running"
     return {"status": status}
+
 @app.get("/cpu", response_class=JSONResponse)
 def get_cpu_usage():
     return {"cpu_percent": psutil.cpu_percent(interval=None)}
