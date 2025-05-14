@@ -6,6 +6,7 @@ import subprocess
 import uvicorn
 import logging
 import psutil
+import time
 
 
 app = FastAPI()
@@ -89,6 +90,7 @@ def execute_script(script_key, args):
         current_args = args
         subprocess.Popen([current_script] + args)
         logging.info(f"Started {current_script} with args {args}")
+        time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
     except Exception as e:
         logging.error(f"Error starting script: {e}")
 
@@ -233,7 +235,7 @@ async def get_homepage(request: Request):
         </head>
         <body>
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
+                <div style="flex: 1; margin-right: 20px;">
                     <h1>Halpha Livestream PMOD/WRC Davos</h1>
                     <h2>Start Livestream</h2>
                     <form action="/start" method="post" style="margin-top: 20px;">
@@ -244,12 +246,12 @@ async def get_homepage(request: Request):
                         </select>
                         <br>
 
-                        <label style="display: inline-block; width: 150px;">Threads:</label>
+                        <label style="display: inline-block; width: 150px;">Worker threads:</label>
                         <input type="number" name="threads" value="3" required style="width: 100px;">
                         <br>
 
                         <label style="display: inline-block; width: 150px;">Exposure:</label>
-                        <input type="number" name="exposure" value="500" required style="width: 100px;">
+                        <input type="number" name="exposure" value="400" required style="width: 100px;">
                         <br>
 
                         <label style="display: inline-block; width: 150px;">nimages:</label>
@@ -269,7 +271,7 @@ async def get_homepage(request: Request):
                     <p id="cpuStatus">CPU Usage: Loading...</p>
                 </div>
 
-                <div>
+                <div style="flex: 1; text-align: center;">
                     <h2>Latest Image</h2>
                     <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540" style="float: right;">
                 </div>
