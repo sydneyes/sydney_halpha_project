@@ -232,42 +232,48 @@ async def get_homepage(request: Request):
             </script>
         </head>
         <body>
-            <h1>Halpha Livestream PMOD/WRC Davos</h1>
-            <h2>Start Livestream</h2>
-            <form action="/start" method="post" style="margin-top: 20px;">
-                <label style="display: inline-block; width: 150px;">Script Version:</label>
-                <select name="script_type" style="width: 150px;">
-                    <option value="standard">Standard</option>
-                    <option value="optimized">Optimized</option>
-                </select>
-                <br><br> <!-- Add spacing between lines -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1>Halpha Livestream PMOD/WRC Davos</h1>
+                    <h2>Start Livestream</h2>
+                    <form action="/start" method="post" style="margin-top: 20px;">
+                        <label style="display: inline-block; width: 150px;">Script Version:</label>
+                        <select name="script_type" style="width: 150px;">
+                            <option value="standard">Standard</option>
+                            <option value="optimized">Optimized</option>
+                        </select>
+                        <br>
 
-                <label style="display: inline-block; width: 150px;">Threads:</label>
-                <input type="number" name="threads" value="3" required style="width: 100px;">
-                <br><br>
+                        <label style="display: inline-block; width: 150px;">Threads:</label>
+                        <input type="number" name="threads" value="3" required style="width: 100px;">
+                        <br>
 
-                <label style="display: inline-block; width: 150px;">Exposure:</label>
-                <input type="number" name="exposure" value="500" required style="width: 100px;">
-                <br><br>
+                        <label style="display: inline-block; width: 150px;">Exposure:</label>
+                        <input type="number" name="exposure" value="500" required style="width: 100px;">
+                        <br>
 
-                <label style="display: inline-block; width: 150px;">nimages:</label>
-                <input type="number" name="nimages" value="10" required style="width: 100px;">
-                <br><br>
+                        <label style="display: inline-block; width: 150px;">nimages:</label>
+                        <input type="number" name="nimages" value="10" required style="width: 100px;">
+                        <br>
 
-                <button type="submit" style="margin-top: 10px;">Start Script</button>
-            </form>
+                        <button type="submit" style="margin-top: 10px;">Start Script</button>
+                    </form>
 
-            <h2>Stop Livestream</h2>
-            <button onclick="stopLivestream()">Stop Script</button>
+                    <h2>Stop Livestream</h2>
+                    <button onclick="stopLivestream()">Stop Script</button>
 
-            <p id="scriptStatus">Script Status: Loading...</p>
-            <p id="cpuStatus">CPU Usage: Loading...</p>
+                    <p id="scriptStatus">Script Status: Loading...</p>
+                    <p id="cpuStatus">CPU Usage: Loading...</p>
 
-            <h3>Set Image Refresh Interval (ms):</h3>
-            <input type="number" id="refreshIntervalInput" min="100">
+                    <h3>Set Image Refresh Interval (ms):</h3>
+                    <input type="number" id="refreshIntervalInput" min="100">
+                </div>
 
-            <h2>Latest Image</h2>
-            <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540">
+                <div>
+                    <h2>Latest Image</h2>
+                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="480" height="270" style="float: right;">
+                </div>
+            </div>
         </body>
     </html>
     """
