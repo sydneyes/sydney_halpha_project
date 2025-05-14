@@ -271,9 +271,9 @@ async def get_homepage(request: Request):
                     <p id="cpuStatus">CPU Usage: Loading...</p>
                 </div>
 
-                <div style="flex: 1; text-align: center;">
+                <div style="flex: 1; text-align: center; margin-left: -100px;">
                     <h2>Latest Image</h2>
-                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540" style="margin-left: 400px;"> 
+                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540"> 
                 </div>
             </div>
         </body>
