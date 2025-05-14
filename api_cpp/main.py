@@ -273,7 +273,7 @@ async def get_homepage(request: Request):
 
                 <div style="flex: 1; text-align: center;">
                     <h2>Latest Image</h2>
-                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540" ="margin-left: 400px;"> 
+                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540" style="margin-left: 40px;"> 
                 </div>
             </div>
         </body>
