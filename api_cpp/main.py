@@ -35,10 +35,20 @@ current_script = None
 current_args = []
 
     
+#def is_script_running(script_path):
+#    command = f"pgrep -f '^{script_path}$'"
+#    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+ #   return result.returncode == 0
+
 def is_script_running(script_path):
-    command = f"pgrep -f '^{script_path}$'"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    return result.returncode == 0
+    for proc in psutil.process_iter(['cmdline']):
+        try:
+            if script_path in ' '.join(proc.info['cmdline']):
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            continue
+    return False
+
 
 def stop_script():
     global current_script
@@ -116,7 +126,7 @@ async def handle_start_script(
             f"--nimages={nimages}"
         ]
         execute_script(script_type, args)
-        return RedirectResponse(url="/", status_code=303)
+        return RedirectResponse(url=f"/?script_type={script_type}", status_code=303)
     else:
         print("not authorized")
         return RedirectResponse(url="/")
@@ -149,6 +159,19 @@ async def get_homepage(request: Request):
 
                 function updateStatus(newStatus) {{
                     document.getElementById("scriptStatus").innerText = "Script Status: " + newStatus;
+                }}
+
+                function getQueryParam(name) {{
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(name);
+                }}
+
+                window.onload = function () {{
+                    // Retain script_type selection
+                    const scriptType = getQueryParam("script_type");
+                    if (scriptType) {{
+                        document.querySelector('select[name="script_type"]').value = scriptType;
+                    }}
                 }}
 
                 async function pollScriptStatus() {{
