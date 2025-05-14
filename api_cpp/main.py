@@ -126,7 +126,7 @@ async def handle_start_script(
             f"--nimages={nimages}"
         ]
         execute_script(script_type, args)
-        return RedirectResponse(url=f"/?script_type={script_type}", status_code=303)
+        return RedirectResponse(url=f"/?script_type={script_type}&threads={threads}&exposure={exposure}&nimages={nimages}",status_code=303)
     else:
         print("not authorized")
         return RedirectResponse(url="/")
@@ -165,14 +165,6 @@ async def get_homepage(request: Request):
                 function getQueryParam(name) {{
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get(name);
-                }}
-
-                window.onload = function () {{
-                    // Retain script_type selection
-                    const scriptType = getQueryParam("script_type");
-                    if (scriptType) {{
-                        document.querySelector('select[name="script_type"]').value = scriptType;
-                    }}
                 }}
 
                 async function pollScriptStatus() {{
@@ -226,6 +218,25 @@ async def get_homepage(request: Request):
                 }}
 
                 window.onload = function () {{
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const scriptType = urlParams.get("script_type");
+                    const threads = urlParams.get("threads");
+                    const exposure = urlParams.get("exposure");
+                    const nimages = urlParams.get("nimages");
+
+                    if (scriptType) {{
+                        document.querySelector('select[name="script_type"]').value = scriptType;
+                    }}
+                    if (threads) {{
+                        document.querySelector('input[name="threads"]').value = threads;
+                    }}
+                    if (exposure) {{
+                        document.querySelector('input[name="exposure"]').value = exposure;
+                    }}
+                    if (nimages) {{
+                        document.querySelector('input[name="nimages"]').value = nimages;
+                    }}
+
                     // Initialize refresh interval input
                     const input = document.getElementById("refreshIntervalInput");
                     input.value = refreshInterval;
