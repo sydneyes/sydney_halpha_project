@@ -6,8 +6,6 @@ import subprocess
 import uvicorn
 import logging
 import psutil
-import time
-
 
 app = FastAPI()
 
@@ -90,7 +88,7 @@ def execute_script(script_key, args):
         current_args = args
         subprocess.Popen([current_script] + args)
         logging.info(f"Started {current_script} with args {args}")
-        time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
+        #time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
     except Exception as e:
         logging.error(f"Error starting script: {e}")
 
@@ -131,15 +129,13 @@ async def handle_start_script(
 @app.get("/stop_script", response_class=JSONResponse, dependencies=[Depends(authenticate_user)])
 def trigger_script_stop(request: Request):
     stop_script()
-    script_status = "Running" if is_script_running(target_script_path) else "Not Running"
-    return {"status": script_status}
+    status = "Running" if current_script and is_script_running(current_script) else "Not Running"
+    return {"status": status}
 
 @app.get("/get_status", response_class=JSONResponse)
 def get_script_status():
-    print(is_script_running(target_script))
-    script_status = "Running" if is_script_running(target_script_path) else "Not Running"
-    return {"status": script_status}
-
+    status = "Running" if current_script and is_script_running(current_script) else "Not Running"
+    return {"status": status}
 @app.get("/cpu", response_class=JSONResponse)
 def get_cpu_usage():
     return {"cpu_percent": psutil.cpu_percent(interval=None)}
