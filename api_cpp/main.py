@@ -263,15 +263,15 @@ async def get_homepage(request: Request):
                     <button onclick="stopLivestream()">Stop Script</button>
 
                     <p id="scriptStatus">Script Status: Loading...</p>
-                    <p id="cpuStatus">CPU Usage: Loading...</p>
 
                     <h3>Set Image Refresh Interval (ms):</h3>
                     <input type="number" id="refreshIntervalInput" min="100">
+                    <p id="cpuStatus">CPU Usage: Loading...</p>
                 </div>
 
                 <div>
                     <h2>Latest Image</h2>
-                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="480" height="270" style="float: right;">
+                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540" style="float: right;">
                 </div>
             </div>
         </body>
