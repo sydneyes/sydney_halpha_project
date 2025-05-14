@@ -4,6 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <opencv2/opencv.hpp>
+#include <getopt.h>
 
 #include "CameraControl.h"
 #include "alignment.h"
