@@ -6,6 +6,7 @@ import subprocess
 import uvicorn
 import logging
 import psutil
+import time 
 
 app = FastAPI()
 
@@ -88,7 +89,7 @@ def execute_script(script_key, args):
         current_args = args
         subprocess.Popen([current_script] + args)
         logging.info(f"Started {current_script} with args {args}")
-        #time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
+        time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
     except Exception as e:
         logging.error(f"Error starting script: {e}")
 
