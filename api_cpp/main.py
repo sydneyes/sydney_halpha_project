@@ -234,16 +234,27 @@ async def get_homepage(request: Request):
         <body>
             <h1>Halpha Livestream PMOD/WRC Davos</h1>
             <h2>Start Livestream</h2>
-            <form action="/start" method="post">
-                <label>Script Version:</label>
-                <select name="script_type">
+            <form action="/start" method="post" style="margin-top: 20px;">
+                <label style="display: inline-block; width: 150px;">Script Version:</label>
+                <select name="script_type" style="width: 150px;">
                     <option value="standard">Standard</option>
                     <option value="optimized">Optimized</option>
-                </select><br>
-                <label>Threads:</label><input type="number" name="threads" value="3" required><br>
-                <label>Exposure:</label><input type="number" name="exposure" value="500" required><br>
-                <label>nimages:</label><input type="number" name="nimages" value="10" required><br>
-                <button type="submit">Start</button>
+                </select>
+                <br><br> <!-- Add spacing between lines -->
+
+                <label style="display: inline-block; width: 150px;">Threads:</label>
+                <input type="number" name="threads" value="3" required style="width: 100px;">
+                <br><br>
+
+                <label style="display: inline-block; width: 150px;">Exposure:</label>
+                <input type="number" name="exposure" value="500" required style="width: 100px;">
+                <br><br>
+
+                <label style="display: inline-block; width: 150px;">nimages:</label>
+                <input type="number" name="nimages" value="10" required style="width: 100px;">
+                <br><br>
+
+                <button type="submit" style="margin-top: 10px;">Start Script</button>
             </form>
 
             <h2>Stop Livestream</h2>
