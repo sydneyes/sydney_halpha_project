@@ -237,13 +237,16 @@ async def get_homepage(request: Request):
                         document.querySelector('input[name="nimages"]').value = nimages;
                     }}
 
-                    // Initialize refresh interval input
                     const input = document.getElementById("refreshIntervalInput");
+                    const savedInterval = localStorage.getItem("refreshInterval");
+                    refreshInterval = savedInterval ? parseInt(savedInterval) : 5000;
                     input.value = refreshInterval;
+
                     input.addEventListener("change", () => {{
                         const newValue = parseInt(input.value);
                         if (!isNaN(newValue) && newValue > 0) {{
                             refreshInterval = newValue;
+                            localStorage.setItem("refreshInterval", refreshInterval);
                             startImageRefresh();
                         }}
                     }});
