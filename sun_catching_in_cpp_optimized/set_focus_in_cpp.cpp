@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
     cv::Mat image;
     for(int i = 0; i < 50000; ++i){     
         camera.capture_frame(exposure, gain, offset, image);
-        std::string output_path = "test_focus.tiff"; //is .png better?
+        std::string output_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/test_focus.png"; //is .tiff better?
         cv::imwrite(output_path, image);
         std::this_thread::sleep_for(std::chrono::milliseconds(refresh));
     }

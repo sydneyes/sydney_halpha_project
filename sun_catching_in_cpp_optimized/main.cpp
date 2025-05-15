@@ -25,6 +25,7 @@ std::atomic<bool> running(true);
 
 std::deque<std::vector<cv::Mat>> processing_queue; //could also use the more efficient std::vector<cv::Mat> if image order doesnt matter
 std::mutex queue_mutex;
+std::mutex save_mutex;
 std::condition_variable queue_cv;
 
 // Capture thread function
@@ -87,7 +88,8 @@ void processing_worker(int id) {
             auto result = process_image(aligned);
 
             // Save the final processed image
-            std::string output_path = "sun_halpha.png";
+            std::string output_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/sun_halpha.png";
+            std::lock_guard<std::mutex> lock(save_mutex);  //not shure if this mutex is really necessary
             cv::imwrite(output_path, result);
             std::cout << "Processed image saved to: " << output_path << std::endl;
         } catch (const std::exception& e) {

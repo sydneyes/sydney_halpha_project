@@ -165,7 +165,7 @@ def get_script_status():
 
 @app.get("/cpu", response_class=JSONResponse)
 def get_cpu_usage():
-    return {"cpu_percent": psutil.cpu_percent(interval=None)}
+    return {"cpu_percent": psutil.cpu_percent(interval=1)}
 
 @app.get("/", response_class=HTMLResponse)
 async def get_homepage(request: Request):
@@ -257,7 +257,14 @@ async def get_homepage(request: Request):
                     }}
                     imageIntervalId = setInterval(() => {{
                         const img = document.getElementById("liveImage");
-                        img.src = `/images/sun.PNG?timestamp=${{Date.now()}}`;
+                        const scriptType = getQueryParam("script_type");
+                        let imageName = "sun_halpha.png"; // default
+
+                        if (scriptType === "set_focus") {{
+                            imageName = "test_focus.png"; // we'll assume TIFF is converted to PNG
+                        }}
+
+                        img.src = `/images/${{imageName}}?timestamp=${{Date.now()}}`;
                     }}, refreshInterval);
                 }}
 
@@ -343,7 +350,7 @@ async def get_homepage(request: Request):
 
                 <div style="flex: 1; text-align: center; margin-left: -400px;">
                     <h2>Latest Image</h2>
-                    <img id="liveImage" src="/images/sun.PNG" alt="Latest Image" width="960" height="540"> 
+                    <img id="liveImage" src="/images/sun_halpha.png" alt="Latest Image" width="960" height="540"> 
                 </div>
             </div>
         </body>
