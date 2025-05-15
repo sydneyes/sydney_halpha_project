@@ -92,7 +92,7 @@ def execute_script(script_key, args):
         if (script_key == "standard") or (script_key == "optimized"):
             subprocess.run(["make"], cwd=script_info["dir"], check=True)
         elif (script_key == "set_focus"):
-            subprocess.run(["make focus"], cwd=script_info["dir"], check=True)
+            subprocess.run(["make", "focus"], cwd=script_info["dir"], check=True)
     except subprocess.CalledProcessError as e:
         logging.error(f"Build failed: {e}")
         return
