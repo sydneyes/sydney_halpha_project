@@ -275,7 +275,24 @@ async def get_homepage(request: Request):
 
                 window.onload = function () {{
                     const urlParams = new URLSearchParams(window.location.search);
-                    
+
+                    // Set script_type from URL if present
+                    const scriptTypeParam = urlParams.get("script_type");
+                    if (scriptTypeParam) {{
+                        const select = document.querySelector('select[name="script_type"]');
+                        select.value = scriptTypeParam;
+                    }}
+
+                    // Set other fields from URL if present (optional)
+                    const threadsParam = urlParams.get("threads");
+                    if (threadsParam) document.querySelector('input[name="threads"]').value = threadsParam;
+                    const exposureParam = urlParams.get("exposure");
+                    if (exposureParam) document.querySelector('input[name="exposure"]').value = exposureParam;
+                    const nimagesParam = urlParams.get("nimages");
+                    if (nimagesParam) document.querySelector('input[name="nimages"]').value = nimagesParam;
+
+                    toggleParameterInputs();
+
                     const input = document.getElementById("refreshIntervalInput");
                     const savedInterval = localStorage.getItem("refreshInterval");
                     refreshInterval = savedInterval ? parseInt(savedInterval) : 5000;
@@ -291,7 +308,6 @@ async def get_homepage(request: Request):
                     }});
 
                     document.querySelector('select[name="script_type"]').addEventListener("change", toggleParameterInputs);
-                    toggleParameterInputs();
 
                     document.querySelector("form").addEventListener("submit", () => {{
                         const refreshValue = document.getElementById("refreshIntervalInput").value || "200";
@@ -349,7 +365,7 @@ async def get_homepage(request: Request):
                     <p id="scriptStatus">Script Status: Loading...</p>
 
                     <h3>Set Image Refresh Interval (ms):</h3>
-                    <input type="number" id="refreshIntervalInput" min="100">
+                    <input type="number" id="refreshIntervalInput" min="10">
                     <p id="cpuStatus">CPU Usage: Loading...</p>
                 </div>
 
