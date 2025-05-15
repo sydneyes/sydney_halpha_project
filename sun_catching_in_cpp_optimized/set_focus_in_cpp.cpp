@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
             case 'r':
                 refresh = std::stoi(optarg);
                 if( refresh< 10 || refresh > 60000){
-                    nimages = 200;
+                    refresh = 200;
                 }
                 break;
             default:
