@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 
   
     int threads = 3;
-    int exposure = 500;
+    int exposure = 400;
     int nimages = 10;
 
     static struct option long_options[] = {

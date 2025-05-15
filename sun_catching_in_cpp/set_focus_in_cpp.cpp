@@ -27,6 +27,7 @@ int main(){
         camera.capture_frame(exposure_time, gain, offset, image);
         std::string output_path = "test_focus.tiff";
         cv::imwrite(output_path, image);
+        std::cout<< image.rows << image.cols;  //needed in main
         std::this_thread::sleep_for(std::chrono::milliseconds(time));
     }
     camera.close();

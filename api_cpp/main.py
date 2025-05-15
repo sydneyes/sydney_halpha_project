@@ -19,6 +19,11 @@ USERNAME = "pi"
 PASSWORD = "halpha"
 
 SCRIPT_OPTIONS = {
+    "set_focus": {
+        "name": "set_focus",
+        "path": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp_optimized/set_focus",  
+        "dir": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp_optimized"
+    },
     "standard": {
         "name": "solar_cam",
         "path": "/home/pi/docs/sydney_halpha_project/sun_catching_in_cpp/solar_cam",
@@ -117,20 +122,31 @@ async def handle_start_script(
     script_type: str = Form(...),
     threads: int = Form(...),
     exposure: int = Form(...),
-    nimages: int = Form(...)
+    nimages: int = Form(...),
+    refresh: str = Form("200") 
 ):
     if authorized == True:
-        args = [
-            f"--threads={threads}",
-            f"--exposure={exposure}",
-            f"--nimages={nimages}"
-        ]
+        args = []
+        if script_type == "optimized":
+            args.extend([
+                f"--threads={threads}",
+                f"--exposure={exposure}",
+                f"--nimages={nimages}"
+            ])
+        elif script_type == "set_focus":
+            args.extend([
+                f"--exposure={exposure}",
+                f"--refresh={refresh}"
+            ])
+        elif script_type == "standard":
+            # No args needed
+            pass
+
         execute_script(script_type, args)
-        return RedirectResponse(url=f"/?script_type={script_type}&threads={threads}&exposure={exposure}&nimages={nimages}",status_code=303)
+        return RedirectResponse(url=f"/?script_type={script_type}&threads={threads}&exposure={exposure}&nimages={nimages}", status_code=303)
     else:
         print("not authorized")
         return RedirectResponse(url="/")
-    
 
 
 @app.get("/stop_script", response_class=JSONResponse, dependencies=[Depends(authenticate_user)])
@@ -165,6 +181,31 @@ async def get_homepage(request: Request):
                 function getQueryParam(name) {{
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get(name);
+                }}
+
+                function toggleParameterInputs() {{
+                    const scriptType = document.querySelector('select[name="script_type"]').value;
+                    const threadInput = document.getElementById("threadInput");
+                    const exposureInput = document.getElementById("exposureInput");
+                    const nimagesInput = document.getElementById("nimagesInput");
+                    const refreshInput = document.getElementById("refreshIntervalInput");
+
+                    if (scriptType === "standard") {{
+                        threadInput.style.display = "none";
+                        exposureInput.style.display = "none";
+                        nimagesInput.style.display = "none";
+                        refreshInput.parentElement.style.display = "block";
+                    }} else if (scriptType === "optimized") {{
+                        threadInput.style.display = "block";
+                        exposureInput.style.display = "block";
+                        nimagesInput.style.display = "block";
+                        refreshInput.parentElement.style.display = "block";
+                    }} else if (scriptType === "set_focus") {{
+                        threadInput.style.display = "none";
+                        exposureInput.style.display = "block";
+                        nimagesInput.style.display = "none";
+                        refreshInput.parentElement.style.display = "block";
+                    }}
                 }}
 
                 async function pollScriptStatus() {{
@@ -219,24 +260,7 @@ async def get_homepage(request: Request):
 
                 window.onload = function () {{
                     const urlParams = new URLSearchParams(window.location.search);
-                    const scriptType = urlParams.get("script_type");
-                    const threads = urlParams.get("threads");
-                    const exposure = urlParams.get("exposure");
-                    const nimages = urlParams.get("nimages");
-
-                    if (scriptType) {{
-                        document.querySelector('select[name="script_type"]').value = scriptType;
-                    }}
-                    if (threads) {{
-                        document.querySelector('input[name="threads"]').value = threads;
-                    }}
-                    if (exposure) {{
-                        document.querySelector('input[name="exposure"]').value = exposure;
-                    }}
-                    if (nimages) {{
-                        document.querySelector('input[name="nimages"]').value = nimages;
-                    }}
-
+                    
                     const input = document.getElementById("refreshIntervalInput");
                     const savedInterval = localStorage.getItem("refreshInterval");
                     refreshInterval = savedInterval ? parseInt(savedInterval) : 5000;
@@ -249,6 +273,14 @@ async def get_homepage(request: Request):
                             localStorage.setItem("refreshInterval", refreshInterval);
                             startImageRefresh();
                         }}
+                    }});
+
+                    document.querySelector('select[name="script_type"]').addEventListener("change", toggleParameterInputs);
+                    toggleParameterInputs();
+
+                    document.querySelector("form").addEventListener("submit", () => {{
+                        const refreshValue = document.getElementById("refreshIntervalInput").value || "200";
+                        document.getElementById("refreshHiddenInput").value = refreshValue;
                     }});
 
                     // Kick off all polling
@@ -272,26 +304,30 @@ async def get_homepage(request: Request):
                     <form action="/start" method="post" style="margin-top: 20px;">
                         <label style="display: inline-block; width: 150px;">Script Version:</label>
                         <select name="script_type" style="width: 150px;">
+                            <option value="set_focus">Set Focus</option>
                             <option value="standard">Standard</option>
                             <option value="optimized">Optimized</option>
                         </select>
                         <br>
-                        <p>Set parameters for optimized script version:</p>
-                        <label style="display: inline-block; width: 150px;">Worker threads:</label>
-                        <input type="number" name="threads" value="3" required style="width: 100px;">
-                        <br>
+                        <div id="threadInput">
+                            <label style="display: inline-block; width: 150px;">Worker threads:</label>
+                            <input type="number" name="threads" value="3" style="width: 100px;">
+                            <br>
+                        </div>
+                        <div id="exposureInput">
+                            <label style="display: inline-block; width: 150px;">Exposure:</label>
+                            <input type="number" name="exposure" value="400" style="width: 100px;">
+                            <br>
+                        </div>
+                        <div id="nimagesInput">
+                            <label style="display: inline-block; width: 150px;">nimages:</label>
+                            <input type="number" name="nimages" value="10" style="width: 100px;">
+                            <br>
+                        </div>
 
-                        <label style="display: inline-block; width: 150px;">Exposure:</label>
-                        <input type="number" name="exposure" value="400" required style="width: 100px;">
-                        <br>
-
-                        <label style="display: inline-block; width: 150px;">nimages:</label>
-                        <input type="number" name="nimages" value="10" required style="width: 100px;">
-                        <br>
-
+                        <input type="hidden" name="refresh" id="refreshHiddenInput">
                         <button type="submit" style="margin-top: 10px;">Start Script</button>
                     </form>
-
                     <h2>Stop Livestream</h2>
                     <button onclick="stopLivestream()">Stop Script</button>
 
