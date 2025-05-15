@@ -276,7 +276,8 @@ async def get_homepage(request: Request):
                             <option value="optimized">Optimized</option>
                         </select>
                         <br>
-
+                        <p>Set parameters for optimized script version:</p>
+                        <br>
                         <label style="display: inline-block; width: 150px;">Worker threads:</label>
                         <input type="number" name="threads" value="3" required style="width: 100px;">
                         <br>
