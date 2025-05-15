@@ -89,7 +89,10 @@ def execute_script(script_key, args):
 
     # Compile if not already built
     try:
-        subprocess.run(["make"], cwd=script_info["dir"], check=True)
+        if (script_key == "standard") or (script_key == "optimized"):
+            subprocess.run(["make"], cwd=script_info["dir"], check=True)
+        elif (script_key == "set_focus"):
+            subprocess.run(["make focus"], cwd=script_info["dir"], check=True)
     except subprocess.CalledProcessError as e:
         logging.error(f"Build failed: {e}")
         return
@@ -100,7 +103,7 @@ def execute_script(script_key, args):
         current_args = args
         subprocess.Popen([current_script] + args)
         logging.info(f"Started {current_script} with args {args}")
-        #time.sleep(2) # used so that script status is polled correctly (can be done more elegantly)
+        #time.sleep(2) # used so that script status is polled correctly (can be done more elegantly), need to import time
     except Exception as e:
         logging.error(f"Error starting script: {e}")
 
