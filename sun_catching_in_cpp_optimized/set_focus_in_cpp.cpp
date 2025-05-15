@@ -48,8 +48,10 @@ int main(int argc, char* argv[]){
     cv::Mat image;
     for(int i = 0; i < 50000; ++i){     
         camera.capture_frame(exposure, gain, offset, image);
-        std::string output_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/test_focus.png"; //is .tiff better?
-        cv::imwrite(output_path, image);
+        std::string tmp_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/test_focus_tmp.png";
+        std::string final_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/test_focus.png";
+        cv::imwrite(tmp_path, image);
+        std::rename(tmp_path.c_str(), final_path.c_str()); //to combat race conditions when refresh rate is high
         std::this_thread::sleep_for(std::chrono::milliseconds(refresh));
     }
     camera.close();
