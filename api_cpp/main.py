@@ -176,9 +176,15 @@ async def get_homepage(request: Request):
             <script>
                 let refreshInterval = 5000;
                 let imageIntervalId = null;
+                let scriptIsRunning = false;
 
                 function updateStatus(newStatus) {{
                     document.getElementById("scriptStatus").innerText = "Script Status: " + newStatus;
+                    const running = newStatus === "Running";
+                    if (running !== scriptIsRunning) {{
+                        scriptIsRunning = running;
+                        startImageRefresh(); // Restart image refresh with the correct interval
+                    }}
                 }}
 
                 function getQueryParam(name) {{
@@ -255,17 +261,16 @@ async def get_homepage(request: Request):
                     if (imageIntervalId) {{
                         clearInterval(imageIntervalId);
                     }}
+                    let interval = scriptIsRunning ? refreshInterval : 5000;
                     imageIntervalId = setInterval(() => {{
                         const img = document.getElementById("liveImage");
                         const scriptType = getQueryParam("script_type");
-                        let imageName = "sun_halpha.png"; // default
-
+                        let imageName = "sun_halpha.png";
                         if (scriptType === "set_focus") {{
-                            imageName = "test_focus.png"; // we'll assume TIFF is converted to PNG
+                            imageName = "test_focus.png";
                         }}
-
                         img.src = `/images/${{imageName}}?timestamp=${{Date.now()}}`;
-                    }}, refreshInterval);
+                    }}, interval);
                 }}
 
                 window.onload = function () {{
