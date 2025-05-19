@@ -158,7 +158,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     #pragma omp parallel for
     for (size_t i = 0; i < N; ++i) {
         cv::Mat blurred, corrected, normalized; //can do cv::UMat here later
-        cv::GaussianBlur(images[i], blurred, cv::Size(256, 256), 64); //cv::blus od cv::boxFilter is much faster..need to test
+        cv::GaussianBlur(images[i], blurred, cv::Size(255, 255), 64); //cv::blus od cv::boxFilter is much faster..need to test, also values in bracket need to be odd for some odd reason
         cv::divide(images[i], blurred, corrected, 1, CV_8U);
         cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
         corrected_images[i] = stretch_contrast(normalized);  // Direct assignment to pre-allocated vector

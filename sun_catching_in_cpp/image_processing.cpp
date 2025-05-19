@@ -142,7 +142,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     std::vector<cv::Mat> corrected_images;
     for (const auto& img : images) {
         cv::Mat blurred, corrected, normalized;
-        cv::GaussianBlur(img, blurred, cv::Size(256, 256), 64);
+        cv::GaussianBlur(img, blurred, cv::Size(255, 255), 64);
         //are really 32 bit needed?
         cv::divide(img, blurred, corrected, 1, CV_8U);
         cv::normalize(corrected, normalized, 0, 255, cv::NORM_MINMAX, CV_8U);
