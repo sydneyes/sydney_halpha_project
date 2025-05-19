@@ -16,7 +16,7 @@ std::vector<cv::Point2f> calculate_shifts(const std::vector<cv::Mat>& raw_data, 
         std::vector<cv::Vec3f> circles;
         cv::Mat resized_image;
         cv::resize(image, resized_image, cv::Size(image.cols / 2, image.rows / 2));  //downscale by 50% to speed up cv::HoughCircles (maybe less % possible?)
-        cv::HoughCircles(resized_image, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 235, 240);
+        cv::HoughCircles(resized_image, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 230, 240);
         
         if (!circles.empty()) {
             cv::Point2f center(circles[0][0] * 2, circles[0][1] * 2);

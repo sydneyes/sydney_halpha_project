@@ -11,7 +11,7 @@ std::vector<cv::Point2f> calculate_shifts(const std::vector<cv::Mat>& raw_data, 
 
     for (const auto& image : raw_data) {
         std::vector<cv::Vec3f> circles;
-        cv::HoughCircles(image, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 470, 480);
+        cv::HoughCircles(image, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 460, 480);
 
         if (circles.empty()) {
             std::ofstream log_file(log_file_path, std::ios::app);

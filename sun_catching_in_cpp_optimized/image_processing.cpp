@@ -186,7 +186,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
 
     // Finding the center of the sun
     std::vector<cv::Vec3f> circles;
-    cv::HoughCircles(normalized, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 470, 480);
+    cv::HoughCircles(normalized, circles, cv::HOUGH_GRADIENT, 1, 800, 10, 30, 460, 480);
 
     if (circles.empty()) {
         throw std::runtime_error("No circle detected in the image.");
