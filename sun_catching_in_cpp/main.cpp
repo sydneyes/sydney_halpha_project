@@ -51,7 +51,7 @@ int main() {
 
     const int n = 10;
     //can probably take shorter times to improve latency
-    std::vector<int> exposure_times = {500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300};
+    std::vector<int> exposure_times = {400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200};
     int gain = 20;
     int offset = 6;
 

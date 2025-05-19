@@ -29,9 +29,10 @@ for (size_t i = 0; i < images.size(); ++i) {
 cv::Mat apply_clip_lut(const cv::Mat& img, float min_val, float max_val) {
     // Create the LUT: a 256-element array where each value is clipped to [min_val, max_val]
     cv::Mat lut(1, 256, CV_8U);
-    for (float i = 0; i < 256; ++i) {
-        lut.at<float>(i) = std::min(std::max(i, min_val), max_val);   //[min,min,min..i,i,i,i,..max,max,max]
+    for (int i = 0; i < 256; ++i) {
+        lut.at<uchar>(i) = static_cast<uchar>(std::min(std::max(float(i), min_val), max_val));
     }
+
 
     cv::Mat clipped;
     cv::LUT(img, lut, clipped);
@@ -155,7 +156,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     int N = images.size();
     std::vector<cv::Mat> corrected_images(N);
 
-    #pragma omp parallel for
+    //#pragma omp parallel for test... remove after
     for (size_t i = 0; i < N; ++i) {
         cv::Mat blurred, corrected, normalized; //can do cv::UMat here later
         cv::GaussianBlur(images[i], blurred, cv::Size(255, 255), 64); //cv::blus od cv::boxFilter is much faster..need to test, also values in bracket need to be odd for some odd reason
