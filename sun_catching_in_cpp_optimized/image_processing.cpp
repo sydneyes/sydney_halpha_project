@@ -203,7 +203,7 @@ cv::Mat process_image(const std::vector<cv::Mat>& images) {
     //cv::Mat result = set_values_outside_radius_to_zero(stacked_image, center_x, center_y, min_radius);
 
     //use possibly more efficient approach to black out pixels around the sun
-    int radius = static_cast<int>(circle[2]) + 30; //need to optimise the +30 parameter
+    int radius = static_cast<int>(circle[2]) + 60; //need to optimise the +30 parameter
     cv::Mat black = set_values_outside_radius_to_zero_mask(normalized, center_x, center_y, radius);
 
     //is commented out streching program in python version relevant? check with python first
