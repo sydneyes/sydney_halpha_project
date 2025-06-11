@@ -49,6 +49,8 @@ int main() {
         return 1;
     }
 
+    std::cout<<"test1";
+
     const int n = 10;
     //can probably take shorter times to improve latency
     std::vector<int> exposure_times = {400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200};
@@ -58,6 +60,9 @@ int main() {
     //capture 10 images
     std::vector<cv::Mat> images;
     capture_images(n, exposure_times, gain, offset, camera, images);
+
+    std::cout<<"test2";
+
 
 /*
     if (images.size() != n) {
@@ -75,9 +80,14 @@ int main() {
         std::cerr << "Alignment error: " << e.what() << std::endl;
         return 1;
     }
+    std::cout<<"test3";
+
 
     //align images
     std::vector<cv::Mat> aligned_images = align_images(images, shifts);
+
+    std::cout<<"test4";
+
 
     // Process aligned images
     cv::Mat processed_image;
@@ -88,10 +98,16 @@ int main() {
         return 1;
     }
 
+    std::cout<<"test5";
+
+
     // Save the final processed image
     std::string output_path = "/home/pi/docs/sydney_halpha_project/api_cpp/images/sun_halpha.png";
     cv::imwrite(output_path, processed_image);
     std::cout << "Processed image saved to: " << output_path << std::endl;
+
+    std::cout<<"test6";
+
 
     return 0;
 }
