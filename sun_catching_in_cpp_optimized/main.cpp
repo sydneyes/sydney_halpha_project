@@ -107,6 +107,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Camera initialization failed." << std::endl;
         return 1;
     }
+    std::cout<<"testtesttest";
 
   
     int threads = 3;
