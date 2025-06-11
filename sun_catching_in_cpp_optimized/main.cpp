@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
     int gain = 20;
     int offset = 6;
 
-    int image_height = 1400;
+    int image_height = 1080;
     int image_width = 1920;
     std::vector<cv::Mat> ring_buffer(nimages);
     for (int i = 0; i < nimages; ++i) {
